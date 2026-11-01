@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %}Новая роль{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="mono dim">доступ и права</p>
+  <h1>Новая роль</h1>
+  <p class="muted">Роль создаётся с нуля: код, название и набор прав. Полный доступ может включить только разработчик.</p>
+</div>
+
+<section class="panel">
+  <form method="post" class="form-grid">
+    {% csrf_token %}
+    <div class="field"><label for="rName">Название *</label><input class="input" id="rName" name="name" required minlength="2" value="{{ form_data.name|default:'' }}"></div>
+    <div class="field"><label for="rCode">Код *</label><input class="input" id="rCode" name="code" required pattern="[a-z][a-z0-9_]{2,39}" value="{{ form_data.code|default:'' }}" placeholder="methodist"></div>
+    <div class="field field--wide"><label for="rDesc">Описание</label><textarea class="textarea" id="rDesc" name="description" rows="3">{{ form_data.description|default:'' }}</textarea></div>
+    <fieldset class="field field--wide perm-fieldset">
+      <legend>Права</legend>
+      <label class="check"><input type="checkbox" name="can_manage_users" {% if form_data.can_manage_users %}checked{% endif %}><span>Управление пользователями<small>назначать группы и роли</small></span></label>
+      <label class="check"><input type="checkbox" name="can_manage_roles" {% if form_data.can_manage_roles %}checked{% endif %}><span>Управление ролями<small>рассматривать заявки и создавать роли</small></span></label>
+      <label class="check"><input type="checkbox" name="can_manage_schedule" {% if form_data.can_manage_schedule %}checked{% endif %}><span>Управление расписанием<small>импорт файла и группы</small></span></label>
+      <label class="check"><input type="checkbox" name="can_create_courses" {% if form_data.can_create_courses %}checked{% endif %}><span>Создание курсов<small>и заданий</small></span></label>
+      <label class="check"><input type="checkbox" name="can_grade" {% if form_data.can_grade %}checked{% endif %}><span>Оценки и ведомости<small>журнал, посещаемость, проверка работ</small></span></label>
+      <label class="check"><input type="checkbox" name="can_upload_works" {% if form_data.can_upload_works or not form_data %}checked{% endif %}><span>Загрузка работ<small>студенческие файлы</small></span></label>
+      <label class="check"><input type="checkbox" name="can_view_all" {% if form_data.can_view_all %}checked{% endif %}><span>Видит все группы<small>все курсы и расписание</small></span></label>
+      <label class="check"><input type="checkbox" name="is_developer" {% if form_data.is_developer %}checked{% endif %} {% if not is_developer %}disabled{% endif %}><span>Полный доступ<small>{% if is_developer %}обходит все проверки прав{% else %}может включить только разработчик{% endif %}</small></span></label>
+      {% if not is_developer %}<input type="hidden" name="is_developer" value="">{% endif %}
+    </fieldset>
+    <div class="field field--wide action-row">
+      <button class="btn btn--accent" type="submit">Создать роль</button>
+      <a class="btn btn--ghost" href="{% url 'accounts:roles' %}">Отмена</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

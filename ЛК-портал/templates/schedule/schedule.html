@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% block title %}Расписание{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="mono dim">расписание</p>
+  <h1>{% if group %}Группа {{ group.code }}{% else %}Расписание{% endif %}</h1>
+  <p class="muted">
+    Источник — файл с bgitu.ru{% if latest_import %} от {{ latest_import.imported_at|date:"d.m.Y H:i" }}{% endif %}.
+    {{ week_label|capfirst }} неделя, № {{ week_number }}.
+  </p>
+</div>
+
+<div class="sched-toolbar">
+  <div class="sched-tabs" role="group" aria-label="Неделя">
+    <a class="sched-tab" href="?week=odd{% if group %}&group={{ group.code }}{% endif %}" {% if week == 'odd' %}aria-current="page"{% endif %}>Нечётная</a>
+    <a class="sched-tab" href="?week=even{% if group %}&group={{ group.code }}{% endif %}" {% if week == 'even' %}aria-current="page"{% endif %}>Чётная</a>
+  </div>
+  <div class="sched-toolbar__right">
+    {% if can_choose_group %}
+      <form method="get" class="inline-form">
+        <input type="hidden" name="week" value="{{ week }}">
+        <label class="visually-hidden" for="groupSelect">Группа</label>
+        <select class="select" id="groupSelect" name="group" onchange="this.form.submit()">
+          {% for g in groups %}<option value="{{ g.code }}" {% if group and g.code == group.code %}selected{% endif %}>{{ g.code }}</option>{% endfor %}
+        </select>
+        <noscript><button class="btn btn--ghost btn--sm" type="submit">Показать</button></noscript>
+      </form>
+    {% elif group %}
+      <span class="badge">{{ group.code }}</span>
+    {% endif %}
+  </div>
+</div>
+
+{% if group %}
+  <div class="sched-grid">
+    {% for day in days %}
+      <div class="sched-day {% if day.is_today %}is-today{% endif %}">
+        <div class="sched-day__name">
+          <span>{{ day.name }}</span>
+          <span>{{ day.full|slice:":2" }}</span>
+        </div>
+        {% for item in day.lessons %}
+          <div class="sched-pair">
+            <div class="sched-pair__time">
+              {{ item.lesson.pair }} · {{ item.time }}
+              {% if item.lesson.subgroup %}<span class="tag-mini">п/г {{ item.lesson.subgroup }}</span>{% endif %}
+            </div>
+            <div class="sched-pair__subj">{{ item.lesson.subject }}</div>
+            <div class="sched-pair__meta">
+              {% if item.lesson.kind %}{{ item.lesson.kind }} · {% endif %}
+              {% if item.lesson.room %}ауд. {{ item.lesson.room }}{% endif %}
+              {% if item.lesson.teacher_name %} · {{ item.lesson.teacher_name }}{% endif %}
+            </div>
+          </div>
+        {% empty %}
+          <p class="sched-empty">нет пар</p>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+
+  <p class="sched-bells mono">
+    звонки:
+    {% for b in bells %}{{ b.pair }} пара {{ b.start }}–{{ b.end }}{% if not forloop.last %} · {% endif %}{% endfor %}
+  </p>
+{% else %}
+  <section class="panel">
+    <div class="empty">
+      <b>Группа не назначена</b>
+      <p>Пока группа не назначена, расписание не к чему привязать. Сотрудник с правом управления пользователями назначит группу в разделе «Студенты» — после этого расписание появится здесь.</p>
+    </div>
+  </section>
+{% endif %}
+
+<section class="panel">
+  <header class="panel__head">
+    <div class="panel__title"><span class="panel__num mono">01</span><h2>Источник данных</h2></div>
+    {% if perms.can_manage_schedule %}<a class="btn btn--ghost btn--sm" href="{% url 'schedule:import' %}">Импорт файла</a>{% endif %}
+  </header>
+  {% if latest_import %}
+    <div class="course-line">
+      <div>
+        <b>{{ latest_import.original_name }}</b>
+        <small>
+          Импортирован {{ latest_import.imported_at|date:"d.m.Y H:i" }} ·
+          {{ latest_import.lessons_count }} занятий · {{ latest_import.groups_count }} групп ·
+          {% if latest_import.imported_by %}загрузил {{ latest_import.imported_by }}{% endif %}
+        </small>
+        <small>{{ latest_import.source_url }}</small>
+      </div>
+      <a class="btn btn--ghost btn--sm" href="{{ latest_import.file.url }}" target="_blank" rel="noopener">Скачать .xls</a>
+    </div>
+    <p class="panel-note">Файл расписания скачан с bgitu.ru (очное обучение, 1 семестр 2026/27, группы ИВТ/ИСТ/ПИ/ПрИ) и разобран в базу: группы, дни, пары, аудитории и преподаватели.</p>
+  {% else %}
+    <div class="empty"><b>Расписание ещё не импортировано</b><p>Сотрудник с правом управления расписанием загрузит файл с сайта БГИТУ.</p></div>
+  {% endif %}
+</section>
+{% endblock %}

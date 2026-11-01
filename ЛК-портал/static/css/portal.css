@@ -1,0 +1,367 @@
+/* ============================================================
+   БГИТУ-портал — стили поверх дизайн-системы лендинга и ЛК
+   ============================================================ */
+
+.app-layout {
+  padding-top: calc(var(--head-h) + clamp(24px, 4vw, 44px));
+  padding-bottom: 24px;
+}
+
+.head-user {
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--text-muted);
+  font-size: 0.6875rem;
+}
+
+.head-sub {
+  margin-left: 2px;
+  padding-left: 10px;
+  border-left: 1px solid var(--line);
+  color: var(--text-faint);
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------- Заголовок страницы ---------- */
+.page-head { margin-bottom: 20px; }
+.page-head h1 {
+  margin: 6px 0 8px;
+  font: 800 clamp(1.75rem, 1.2rem + 2.4vw, 3rem)/1.06 var(--font-display);
+  letter-spacing: -0.03em;
+}
+.page-head p { max-width: 72ch; }
+.page-head--row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px 24px;
+  flex-wrap: wrap;
+}
+
+/* ---------- Сообщения ---------- */
+.flash-stack { display: grid; gap: 8px; margin-bottom: 16px; }
+.flash {
+  padding: 12px 16px;
+  border: 1px solid var(--line-strong);
+  border-left: 2px solid var(--accent);
+  border-radius: var(--radius-s);
+  background: var(--bg-raised);
+  color: var(--text-muted);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+.flash b { color: var(--text); }
+.flash--success { border-left-color: var(--accent); }
+.flash--info { border-left-color: var(--line-strong); }
+.flash--warning { border-left-color: var(--accent); color: var(--text); }
+.flash--error { border-color: color-mix(in oklab, var(--accent) 55%, transparent); color: var(--text); }
+
+/* ---------- Сетки ---------- */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+.side-stack { display: grid; gap: 16px; min-width: 0; }
+.action-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.action-row .btn { text-decoration: none; }
+
+/* ---------- Строки занятий и курсов ---------- */
+.lesson-list { display: grid; }
+.lesson-line {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr);
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.lesson-line:last-child { border-bottom: 0; }
+.lesson-line__time { color: var(--text-faint); font-size: 0.625rem; letter-spacing: 0.04em; }
+.lesson-line__main b { font-weight: 600; }
+.lesson-line__main small { display: block; margin-top: 2px; color: var(--text-muted); font-size: 0.8125rem; }
+
+.course-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.course-line > div { min-width: 0; }
+.course-line small { overflow-wrap: anywhere; }
+.course-line:last-child { border-bottom: 0; }
+.course-line b { font-weight: 600; }
+.course-line small { display: block; margin-top: 2px; color: var(--text-muted); font-size: 0.8125rem; }
+.course-line a { text-decoration: none; }
+
+/* ---------- Карточки курсов ---------- */
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.course-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  background: var(--bg-raised);
+}
+.course-card__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.course-card h2 { font: 600 1.125rem/1.3 var(--font-display); letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.course-card__desc { color: var(--text-muted); font-size: 0.8125rem; line-height: 1.5; }
+.course-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  color: var(--text-faint);
+  font: 500 0.625rem/1.4 var(--font-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.course-card .btn { margin-top: auto; align-self: flex-start; text-decoration: none; }
+
+/* ---------- Задания и формы ---------- */
+.assignment { padding: 14px 0; border-bottom: 1px solid var(--line); }
+.assignment:last-child { border-bottom: 0; }
+.assignment__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.assignment__head b { font-weight: 600; }
+.assignment__head small { display: block; margin-top: 2px; color: var(--text-faint); font-size: 0.75rem; }
+.assignment__desc { margin-top: 8px; color: var(--text-muted); font-size: 0.875rem; line-height: 1.55; }
+.assignment__status { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; margin-top: 10px; }
+.assignment__comment {
+  margin-top: 8px;
+  padding-left: 10px;
+  border-left: 2px solid var(--line-strong);
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.submit-form,
+.review-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.submit-form .input, .review-form .input { flex: 1 1 180px; min-height: 44px; }
+.review-form__actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.file-input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-s);
+  background: var(--bg);
+  color: var(--text-muted);
+  font-size: 0.8125rem;
+}
+.file-input::file-selector-button {
+  margin-right: 12px;
+  padding: 6px 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--bg-panel);
+  color: var(--text);
+  font: 500 0.75rem/1 var(--font-text);
+  cursor: pointer;
+}
+.form-stack { display: grid; gap: 12px; }
+.inline-form { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.inline-form--wide { flex-wrap: nowrap; }
+.input--sm, .select--sm { min-height: 38px; height: 38px; font-size: 0.8125rem; padding: 0 10px; }
+.input--sm { max-width: 150px; }
+.check--inline { min-height: 38px; font-size: 0.8125rem; gap: 6px; }
+
+/* ---------- Роли ---------- */
+.role-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+.role-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  background: var(--bg-raised);
+}
+.role-card--current { border-color: color-mix(in oklab, var(--accent) 45%, transparent); }
+.role-card__top { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.role-card h2 { font: 600 1.125rem/1.3 var(--font-display); letter-spacing: -0.01em; }
+.role-card p { font-size: 0.8125rem; line-height: 1.5; }
+.role-card__perms { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-pill);
+  color: var(--text-muted);
+  font: 500 0.625rem/1 var(--font-mono);
+  letter-spacing: 0.04em;
+}
+.role-card__action { display: flex; gap: 8px; margin-top: auto; }
+.role-card__action .input { min-height: 38px; height: 38px; font-size: 0.8125rem; }
+.role-card__current { margin-top: auto; color: var(--accent); }
+.perm-fieldset {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px 20px;
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+}
+.perm-fieldset legend { padding: 0 6px; color: var(--text-faint); font: 500 0.6875rem/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* ---------- Посещаемость ---------- */
+.attendance-row {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+.attendance-row__name { font-weight: 500; }
+.attendance-row__status { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.attendance-row__status .check { min-height: 38px; }
+
+/* ---------- Таблицы и прочее ---------- */
+.students-table td { vertical-align: middle; }
+.journal-table { min-width: 720px; }
+.journal-table .inline-form { flex-wrap: wrap; }
+.grade--fail { border-color: color-mix(in oklab, var(--accent) 65%, transparent); color: var(--accent); }
+.stat b.stat-text { font: 600 1.125rem/1.3 var(--font-display); letter-spacing: -0.01em; }
+code { font-family: var(--font-mono); font-size: 0.8125rem; color: var(--text-muted); }
+.sched-tab[aria-current="page"] { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+
+/* ---------- Вход и регистрация ---------- */
+.auth-page {
+  min-height: 100dvh;
+  background: var(--bg);
+}
+.auth-shell {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+}
+.auth-aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 36px;
+  padding: clamp(28px, 5vw, 64px);
+  border-right: 1px solid var(--line);
+  background:
+    radial-gradient(60% 90% at 85% 5%, var(--accent-soft), transparent 60%),
+    radial-gradient(50% 80% at 5% 100%, var(--aux-soft), transparent 65%),
+    var(--bg);
+}
+.auth-display {
+  margin: 26px 0 12px;
+  font: 800 clamp(2rem, 4vw, 3.6rem)/1.02 var(--font-display);
+  letter-spacing: -0.04em;
+}
+.auth-points { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.auth-points li {
+  display: flex;
+  gap: 10px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+.auth-points li::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  flex: none;
+  margin-top: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.auth-foot { color: var(--text-faint); }
+.auth-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 5vw, 56px);
+}
+.auth-card {
+  width: min(100%, 440px);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.auth-logo { margin-bottom: 10px; }
+.auth-kicker { margin-top: 14px; }
+.auth-card h1 { margin-top: 6px; font-size: clamp(1.7rem, 3vw, 2.25rem); }
+.auth-lead { margin-top: 8px; font-size: 0.875rem; line-height: 1.55; }
+.auth-form { display: grid; gap: 14px; margin-top: 22px; }
+.auth-form__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.auth-form .btn { margin-top: 4px; text-decoration: none; }
+.field-hint { display: block; color: var(--text-faint); font-size: 0.6875rem; line-height: 1.4; }
+.auth-alt { margin-top: 18px; color: var(--text-muted); font-size: 0.8125rem; }
+.auth-alt a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklab, var(--accent) 55%, transparent);
+}
+.auth-demo { margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line); }
+.auth-demo summary { cursor: pointer; font-size: 0.6875rem; letter-spacing: 0.06em; }
+.auth-demo ul { display: grid; gap: 4px; margin-top: 8px; padding-left: 0; list-style: none; }
+.auth-demo li { color: var(--text-muted); font-size: 0.8125rem; }
+.auth-demo b { color: var(--text); font-family: var(--font-mono); font-weight: 500; }
+.error-card { text-align: left; }
+.error-card .btn { margin-top: 18px; text-decoration: none; }
+
+@media (max-width: 900px) {
+  .auth-shell { grid-template-columns: 1fr; }
+  .auth-aside {
+    gap: 18px;
+    padding: 28px 20px 22px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .auth-display { margin: 16px 0 8px; font-size: clamp(1.9rem, 8vw, 2.6rem); }
+  .auth-points, .auth-foot { display: none; }
+  .auth-main { align-items: flex-start; padding: 24px 20px 40px; }
+}
+@media (max-width: 520px) {
+  .auth-form__row { grid-template-columns: 1fr; }
+}
+
+/* ---------- Адаптив ---------- */
+@media (max-width: 1200px) {
+  .course-grid, .role-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .course-grid, .role-grid { grid-template-columns: 1fr; }
+  .perm-fieldset { grid-template-columns: 1fr; }
+  .attendance-row { grid-template-columns: 1fr; gap: 4px; }
+}
+@media (max-width: 640px) {
+  .page-head h1 { font-size: clamp(1.45rem, 7vw, 2rem); }
+  .lesson-line { grid-template-columns: 1fr; gap: 2px; }
+  .inline-form--wide { flex-wrap: wrap; }
+  .head-tools .head-user { display: none; }
+  .head-tools .badge { display: none; }
+  .course-grid, .role-grid { grid-template-columns: 1fr; }
+  .stat-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

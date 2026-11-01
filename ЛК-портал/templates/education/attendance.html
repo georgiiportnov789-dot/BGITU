@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load bgitu %}
+{% block title %}Посещаемость · {{ course.title }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="mono dim">{{ course.code }} · {{ course.group.code }}</p>
+  <h1>Посещаемость</h1>
+  <p class="muted">Отметьте студентов за занятие. Повторное сохранение за ту же дату обновляет отметки.</p>
+</div>
+
+<section class="panel">
+  <header class="panel__head">
+    <div class="panel__title"><span class="panel__num mono">01</span><h2>{{ date|date:"d.m.Y" }}</h2></div>
+    <form method="get" class="inline-form">
+      <input class="input input--sm" type="date" name="date" value="{{ date|date:'Y-m-d' }}" aria-label="Дата занятия">
+      <button class="btn btn--ghost btn--sm" type="submit">Показать</button>
+    </form>
+  </header>
+
+  <form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="date" value="{{ date|date:'Y-m-d' }}">
+    {% for row in rows %}
+      <div class="attendance-row">
+        <div class="attendance-row__name">{{ row.student|fio }}</div>
+        <div class="attendance-row__status">
+          {% for value, label in statuses %}
+            <label class="check check--inline">
+              <input type="radio" name="status_{{ row.student.id }}" value="{{ value }}" {% if row.status == value %}checked{% endif %}>
+              <span>{{ label }}</span>
+            </label>
+          {% endfor %}
+        </div>
+      </div>
+    {% empty %}
+      <div class="empty"><b>Студентов нет</b><p>На курс никто не зачислен.</p></div>
+    {% endfor %}
+    <div class="action-row">
+      <button class="btn btn--accent" type="submit">Сохранить посещаемость</button>
+      <a class="btn btn--ghost" href="{% url 'education:journal' course.id %}">В журнал</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

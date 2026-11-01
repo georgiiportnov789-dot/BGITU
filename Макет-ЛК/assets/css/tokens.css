@@ -1,0 +1,65 @@
+/* ============================================================
+   БГИТУ — дизайн-токены
+   Единственное место, где задаются брендовые значения.
+   Источник: макет/bgitu-landing-STYLE.md (разделы 2–4).
+   ============================================================ */
+
+:root {
+  /* ---------- 1. БРЕНД (5 значений) ---------- */
+  --brand-base:      #0d0d0d;  /* 60 % — фон страницы                      */
+  --brand-ink:       #f2f2f2;  /* текст и линии поверх фона                */
+  --brand-accent:    #ff5a2e;  /* 10 % — кнопки, акценты, подсветка        */
+  --brand-on-accent: #0d0d0d;  /* текст на акценте (контраст ≥ 4.5:1)      */
+  --brand-aux:       #ff9a3c;  /* второй оттенок свечения (только тинты)   */
+  --aurora-blend:    lighter;
+
+  /* ---------- 2. СЕМАНТИКА (не править) ---------- */
+  --bg:          var(--brand-base);
+  --bg-raised:   color-mix(in oklab, var(--brand-base), var(--brand-ink) 5%);
+  --bg-panel:    color-mix(in oklab, var(--brand-base), var(--brand-ink) 9%);
+  --bg-glass:    color-mix(in oklab, var(--brand-base) 64%, transparent);
+
+  --text:        var(--brand-ink);
+  --text-muted:  color-mix(in oklab, var(--brand-ink) 72%, var(--brand-base));
+  --text-faint:  color-mix(in oklab, var(--brand-ink) 60%, var(--brand-base));
+
+  --line:        color-mix(in oklab, var(--brand-ink) 13%, transparent);
+  --line-strong: color-mix(in oklab, var(--brand-ink) 26%, transparent);
+
+  --accent:       var(--brand-accent);
+  --accent-ink:   var(--brand-on-accent);
+  --accent-hover: color-mix(in oklab, var(--brand-accent), var(--brand-ink) 28%);
+  --accent-soft:  color-mix(in oklab, var(--brand-accent) 14%, transparent);
+  --accent-glow:  color-mix(in oklab, var(--brand-accent) 42%, transparent);
+  --aux-soft:     color-mix(in oklab, var(--brand-aux) 20%, transparent);
+  --focus:        var(--brand-accent);
+
+  /* ---------- 3. ТИПОГРАФИКА ---------- */
+  --font-display: 'Unbounded', 'Arial Black', 'Helvetica Neue', sans-serif;
+  --font-text:    'Inter Tight', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+
+  --fs-mono:      0.75rem;
+  --fs-body:      clamp(1rem, 0.95rem + 0.2vw, 1.125rem);
+  --fs-lead:      clamp(1.0625rem, 0.98rem + 0.45vw, 1.375rem);
+  --fs-statement: clamp(1.375rem, 0.85rem + 2vw, 2.5rem);
+  --fs-row:       clamp(1.25rem, 0.8rem + 1.25vw, 2.125rem);
+  --fs-step:      clamp(2rem, 1.4rem + 2vw, 3.5rem);
+  --fs-h2:        clamp(2rem, 1.1rem + 3.6vw, 4.5rem);
+  --fs-hero:      clamp(2.25rem, 0.9rem + 4.6vw, 5.5rem);
+  --fs-num:       clamp(2.75rem, 1.6rem + 4.2vw, 5.5rem);
+
+  /* ---------- 4. РАЗМЕТКА ---------- */
+  --container: 1240px;
+  --gutter:    clamp(16px, 4vw, 48px);
+  --head-h:    56px;
+
+  --radius-s:    10px;
+  --radius-m:    20px;
+  --radius-l:    28px;
+  --radius-pill: 999px;
+
+  --ease:      cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast:  160ms;
+  --dur:       320ms;
+}

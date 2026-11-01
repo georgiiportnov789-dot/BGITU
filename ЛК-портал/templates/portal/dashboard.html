@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load bgitu %}
+{% block title %}Кабинет{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="mono dim">личный кабинет</p>
+  <h1>{{ user|fio }}</h1>
+  <p class="muted">
+    {{ role.name|default:"роль не назначена" }}
+    {% if group %} · группа {{ group.code }} · {{ group.course }} курс{% else %} · группа не назначена{% endif %}
+    · {{ today|date:"l, j F Y" }} · {{ week_label }} неделя
+  </p>
+</div>
+
+{% if not group %}
+  <div class="flash flash--warning">Группа не назначена, поэтому расписание пустое. Деканат или администратор назначит группу в разделе «Студенты».</div>
+{% endif %}
+
+<div class="stat-strip">
+  <div class="stat">
+    <p class="mono dim">средний балл</p>
+    <b>{{ average|ru_num }}</b>
+    <small>{{ grades_count }} оценок в книжке</small>
+  </div>
+  <div class="stat">
+    <p class="mono dim">задолженности</p>
+    <b>{{ debts|length }}</b>
+    <small>{% if debts %}есть незакрытые{% else %}всё закрыто{% endif %}</small>
+  </div>
+  <div class="stat">
+    <p class="mono dim">стипендия</p>
+    <b>{{ stipend.total|money }} ₽</b>
+    <small>{% if stipend.boosted %}повышенная, ×1,8{% else %}обычная академическая{% endif %}</small>
+  </div>
+  <div class="stat">
+    <p class="mono dim">роль</p>
+    <b class="stat-text">{{ role.name|default:"—" }}</b>
+    <small><a href="{% url 'accounts:roles' %}">запросить другую</a>{% if pending_role_requests %} · {{ pending_role_requests }} заявк.{% endif %}</small>
+  </div>
+</div>
+
+<div class="grid-2">
+  <section class="panel">
+    <header class="panel__head">
+      <div class="panel__title"><span class="panel__num mono">01</span><h2>{% if lessons_is_today %}Сегодня{% else %}Ближайшие занятия{% endif %}</h2></div>
+      <span class="mono dim">{{ lessons_day|date:"l, j F" }} · {{ lessons_week_label }}</span>
+    </header>
+    {% if today_lessons %}
+      <div class="lesson-list">
+        {% for item in today_lessons %}
+          <div class="lesson-line">
+            <div class="lesson-line__time mono">
+              {{ item.lesson.pair }} пара{% if item.time %} · {{ item.time.start }}{% endif %}
+            </div>
+            <div class="lesson-line__main">
+              <b>{{ item.lesson.subject }}</b>
+              <small>
+                {% if item.lesson.kind %}{{ item.lesson.kind }} · {% endif %}
+                {% if item.lesson.room %}ауд. {{ item.lesson.room }}{% else %}аудитория не указана{% endif %}
+                {% if item.lesson.teacher_name %} · {{ item.lesson.teacher_name }}{% endif %}
+                {% if item.lesson.subgroup %} · подгруппа {{ item.lesson.subgroup }}{% endif %}
+              </small>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="empty"><b>Пар нет</b><p>На сегодня занятий по расписанию нет. Полное расписание — в разделе «Расписание».</p></div>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <header class="panel__head">
+      <div class="panel__title"><span class="panel__num mono">02</span><h2>{% if teaching %}Мои курсы{% else %}Мои дисциплины{% endif %}</h2></div>
+      <a class="mono dim" href="{% url 'education:courses' %}">все →</a>
+    </header>
+    {% if teaching %}
+      {% for course in teaching %}
+        <div class="course-line">
+          <div><b>{{ course.title }}</b><small>{{ course.group.code }} · {{ course.students_count }} студентов</small></div>
+          <a class="btn btn--ghost btn--sm" href="{% url 'education:journal' course.id %}">Журнал</a>
+        </div>
+      {% empty %}<div class="empty"><b>Курсов пока нет</b><p>Создайте первый курс в разделе «Курсы».</p></div>{% endfor %}
+    {% elif courses %}
+      {% for enrollment in courses %}
+        <div class="course-line">
+          <div><b>{{ enrollment.course.title }}</b><small>{{ enrollment.course.teacher|fio }} · {{ enrollment.course.code }}</small></div>
+          <a class="mono dim" href="{% url 'education:course_detail' enrollment.course.id %}">открыть →</a>
+        </div>
+      {% endfor %}
+    {% else %}
+      <div class="empty"><b>Дисциплин нет</b><p>Вы ещё не зачислены на курсы. Преподаватель создаёт курс для группы — студенты группы зачисляются автоматически.</p></div>
+    {% endif %}
+  </section>
+</div>
+
+<div class="grid-2">
+  <section class="panel">
+    <header class="panel__head">
+      <div class="panel__title"><span class="panel__num mono">03</span><h2>Что сдать</h2></div>
+      <span class="mono dim">{{ pending_assignments|length }}</span>
+    </header>
+    {% for assignment in pending_assignments %}
+      <div class="course-line">
+        <div><b>{{ assignment.title }}</b><small>{{ assignment.course.title }}{% if assignment.due_date %} · до {{ assignment.due_date|date:"d.m.Y" }}{% endif %}</small></div>
+        <a class="mono dim" href="{% url 'education:course_detail' assignment.course.id %}">сдать →</a>
+      </div>
+    {% empty %}
+      <div class="empty"><b>Всё сдано</b><p>Нет заданий без работы. Проверить статусы — в разделе «Мои работы».</p></div>
+    {% endfor %}
+  </section>
+
+  <section class="panel">
+    <header class="panel__head">
+      <div class="panel__title"><span class="panel__num mono">04</span><h2>Мои работы</h2></div>
+      <a class="mono dim" href="{% url 'education:works' %}">все →</a>
+    </header>
+    {% for submission in recent_submissions %}
+      <div class="course-line">
+        <div><b>{{ submission.assignment.title }}</b><small>{{ submission.assignment.course.title }} · {{ submission.get_status_display }}</small></div>
+        <span class="req-status req-status--{% if submission.status == 'reviewed' %}ready{% elif submission.status == 'returned' %}work{% else %}work{% endif %}">{{ submission.get_status_display }}</span>
+      </div>
+    {% empty %}
+      <div class="empty"><b>Работ пока нет</b><p>Загрузите первую работу на странице курса — файл появится здесь со статусом проверки.</p></div>
+    {% endfor %}
+  </section>
+</div>
+
+<section class="panel">
+  <header class="panel__head">
+    <div class="panel__title"><span class="panel__num mono">05</span><h2>Профиль и роль</h2></div>
+    <a class="btn btn--ghost btn--sm" href="{% url 'accounts:roles' %}">Роли и заявки</a>
+  </header>
+  <dl class="profile-grid">
+    <div class="profile-row"><dt>Роль</dt><dd><span class="badge badge--accent">{{ role.name|default:"—" }}</span></dd></div>
+    <div class="profile-row"><dt>Группа</dt><dd>{{ group.code|default:"не назначена" }}</dd></div>
+    <div class="profile-row"><dt>Зачётная книжка</dt><dd>{{ profile.record_book|default:"—" }}</dd></div>
+    <div class="profile-row"><dt>E-mail</dt><dd>{{ user.email|default:"—" }}</dd></div>
+  </dl>
+  <p class="panel-note">Права роли: {{ role.permission_list|join:", "|default:"базовый доступ" }}. Полный доступ у роли «Разработчик».</p>
+</section>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% load static %}
+{% load bgitu %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{% block title %}Личный кабинет{% endblock %} — БГИТУ</title>
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23ff5a2e'/%3E%3Ctext x='32' y='46' font-family='Arial,sans-serif' font-size='40' font-weight='bold' text-anchor='middle' fill='%230d0d0d'%3EБ%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/cabinet.css' %}">
+  <link rel="stylesheet" href="{% static 'css/portal.css' %}">
+</head>
+<body id="top">
+<a class="skip" href="#content">К содержимому</a>
+
+<header class="site-head" id="siteHead">
+  <a class="logo" href="{% url 'portal:dashboard' %}">
+    <svg class="logo__mark" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="1" y="1" width="30" height="30" rx="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M11.2 7.6h6.9c3.3 0 5.2 1.8 5.2 4.4 0 1.7-.9 3-2.4 3.7 1.9.5 3.1 2 3.1 4.2 0 3-2.2 4.7-5.8 4.7h-7V7.6Zm3.8 2.9v4.1h2.8c1.4 0 2.2-.8 2.2-2.1s-.8-2-2.2-2h-2.8Zm0 7v4.4h3.1c1.5 0 2.4-.8 2.4-2.2s-.9-2.2-2.4-2.2h-3.1Z" fill="currentColor"/>
+    </svg>
+    <span class="logo__word">БГИТУ</span>
+    <span class="head-sub mono">кабинет</span>
+  </a>
+
+  <div class="head-tools">
+    {% if current_role %}<span class="badge badge--soft">{{ current_role.name }}</span>{% endif %}
+    <span class="head-user mono">{{ user|fio }}</span>
+    <form method="post" action="{% url 'accounts:logout' %}">
+      {% csrf_token %}
+      <button class="btn btn--ghost btn--sm" type="submit">Выйти</button>
+    </form>
+    <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="cabNav">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="container cab-layout app-layout">
+  <aside class="cab-nav" id="cabNav" aria-label="Разделы кабинета">
+    <div class="cab-nav__head">
+      <span class="mono dim">разделы</span>
+      <button class="cab-nav__close" id="navClose" type="button" aria-label="Закрыть меню">×</button>
+    </div>
+
+    <a href="{% url 'portal:dashboard' %}" {% if request.path == '/cabinet/' %}aria-current="page"{% endif %}>Обзор</a>
+    <a href="{% url 'schedule:schedule' %}" {% if request.path == '/schedule/' %}aria-current="page"{% endif %}>Расписание</a>
+    <a href="{% url 'portal:grades' %}" {% if request.path == '/cabinet/grades/' %}aria-current="page"{% endif %}>Оценки</a>
+    <a href="{% url 'education:courses' %}" {% if request.path == '/courses/' or '/courses/' in request.path and request.path != '/courses/new/' %}aria-current="page"{% endif %}>Курсы</a>
+    <a href="{% url 'education:works' %}" {% if request.path == '/works/' %}aria-current="page"{% endif %}>Мои работы</a>
+    <a href="{% url 'accounts:roles' %}" {% if request.path == '/roles/' %}aria-current="page"{% endif %}>Роли</a>
+
+    {% if perms.can_manage_users or perms.can_manage_roles or perms.can_approve_roles or perms.can_manage_schedule %}
+    <div class="cab-nav__sep" aria-hidden="true"></div>
+    <p class="cab-nav__label mono">управление</p>
+    {% endif %}
+    {% if perms.can_manage_users %}<a href="{% url 'accounts:students' %}" {% if request.path == '/manage/students/' %}aria-current="page"{% endif %}>Студенты</a>{% endif %}
+    {% if perms.can_approve_roles %}<a href="{% url 'accounts:role_requests' %}" {% if request.path == '/role-requests/' %}aria-current="page"{% endif %}>Заявки на роли</a>{% endif %}
+    {% if perms.can_manage_roles %}<a href="{% url 'accounts:role_create' %}" {% if request.path == '/roles/new/' %}aria-current="page"{% endif %}>Создать роль</a>{% endif %}
+    {% if perms.can_manage_schedule %}<a href="{% url 'schedule:import' %}" {% if request.path == '/schedule/import/' %}aria-current="page"{% endif %}>Импорт расписания</a>{% endif %}
+    <form method="post" action="{% url 'accounts:logout' %}" class="cab-nav__logout">
+      {% csrf_token %}
+      <button class="btn btn--ghost btn--sm" type="submit">Выйти из кабинета</button>
+    </form>
+  </aside>
+
+  <div class="nav-backdrop" id="navBackdrop" hidden></div>
+
+  <main class="cab-main" id="content">
+    {% if messages %}
+      <div class="flash-stack" role="status" aria-live="polite">
+        {% for message in messages %}
+          <div class="flash flash--{{ message.tags|default:'info' }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+
+<footer class="site-foot">
+  <div class="container foot-bottom mono">
+    <span>© 2026 БГИТУ · личный кабинет</span>
+    <span>расписание: bgitu.ru</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script src="{% static 'js/app.js' %}"></script>
+</body>
+</html>

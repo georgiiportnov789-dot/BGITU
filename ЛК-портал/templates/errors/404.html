@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 — страница не найдена</title>
+  <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/portal.css' %}">
+</head>
+<body class="auth-page">
+  <main class="auth-card error-card">
+    <p class="mono dim">404</p>
+    <h1>Страница не найдена</h1>
+    <p class="muted">Возможно, ссылка устарела. Вернитесь в кабинет и выберите раздел в меню.</p>
+    <a class="btn btn--accent" href="/cabinet/">Вернуться в кабинет</a>
+  </main>
+</body>
+</html>

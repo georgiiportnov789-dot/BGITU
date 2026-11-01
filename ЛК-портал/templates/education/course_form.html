@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Новый курс{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="mono dim">учебный процесс</p>
+  <h1>Новый курс</h1>
+  <p class="muted">Курс привязывается к группе: все студенты группы зачисляются автоматически.</p>
+</div>
+
+<section class="panel">
+  <form method="post" class="form-grid">
+    {% csrf_token %}
+    <div class="field field--wide"><label for="cTitle">Название *</label><input class="input" id="cTitle" name="title" required minlength="3" value="{{ form_data.title|default:'' }}"></div>
+    <div class="field"><label for="cCode">Код *</label><input class="input" id="cCode" name="code" required value="{{ form_data.code|default:'' }}" placeholder="БД-201"></div>
+    <div class="field"><label for="cGroup">Группа *</label>
+      <select class="select" id="cGroup" name="group" required>
+        <option value="">— выберите —</option>
+        {% for group in groups %}<option value="{{ group.id }}" {% if form_data.group == group.id|stringformat:"s" %}selected{% endif %}>{{ group.code }} · {{ group.course }} курс</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field"><label for="cSemester">Семестр</label><input class="input" id="cSemester" name="semester" type="number" min="1" max="12" value="{{ form_data.semester|default:'3' }}"></div>
+    <div class="field field--wide"><label for="cDesc">Описание</label><textarea class="textarea" id="cDesc" name="description" rows="4">{{ form_data.description|default:'' }}</textarea></div>
+    <div class="field field--wide action-row">
+      <button class="btn btn--accent" type="submit">Создать курс</button>
+      <a class="btn btn--ghost" href="{% url 'education:courses' %}">Отмена</a>
+    </div>
+  </form>
+</section>
+{% endblock %}

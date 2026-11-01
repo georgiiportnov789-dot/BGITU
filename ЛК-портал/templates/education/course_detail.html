@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load bgitu %}
+{% block title %}{{ course.title }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="mono dim">{{ course.code }} · {{ course.group.code }} · {{ course.semester }} семестр</p>
+  <h1>{{ course.title }}</h1>
+  <p class="muted">{{ course.description|default:"Описание курса не заполнено." }}</p>
+  <p class="mono dim">преподаватель: {{ course.teacher|fio }}</p>
+</div>
+
+{% if is_teacher %}
+  <div class="action-row">
+    <a class="btn btn--accent" href="{% url 'education:journal' course.id %}">Журнал и оценки</a>
+    <a class="btn btn--ghost" href="{% url 'education:attendance' course.id %}">Посещаемость</a>
+  </div>
+{% endif %}
+
+<div class="grid-2">
+  <section class="panel">
+    <header class="panel__head">
+      <div class="panel__title"><span class="panel__num mono">01</span><h2>Задания</h2></div>
+      <span class="mono dim">{{ assignments|length }}</span>
+    </header>
+
+    {% for assignment in assignments %}
+      <article class="assignment">
+        <div class="assignment__head">
+          <div>
+            <b>{{ assignment.title }}</b>
+            <small>
+              {% if assignment.due_date %}до {{ assignment.due_date|date:"d.m.Y" }}{% else %}без срока{% endif %}
+              · {{ assignment.submissions_count }} работ
+            </small>
+          </div>
+          {% if assignment.material %}<a class="mono dim" href="{{ assignment.material.url }}" target="_blank" rel="noopener">материал ↗</a>{% endif %}
+        </div>
+        {% if assignment.description %}<p class="assignment__desc">{{ assignment.description }}</p>{% endif %}
+
+        {% if is_enrolled %}
+          {% with submission=my_submissions|get_item:assignment.id %}
+            {% if submission %}
+              <div class="assignment__status">
+                <span class="req-status req-status--{% if submission.status == 'reviewed' %}ready{% else %}work{% endif %}">{{ submission.get_status_display }}</span>
+                <span class="mono dim">{{ submission.submitted_at|date:"d.m.Y H:i" }}</span>
+                {% if submission.grade %}<span class="grade">{{ submission.grade }}</span>{% endif %}
+                {% if submission.file %}<a class="mono dim" href="{{ submission.file.url }}" target="_blank" rel="noopener">файл ↗</a>{% else %}<span class="mono dim">без файла</span>{% endif %}
+              </div>
+              {% if submission.teacher_comment %}<p class="assignment__comment">Преподаватель: {{ submission.teacher_comment }}</p>{% endif %}
+              {% if submission.status == 'returned' %}
+                <form method="post" action="{% url 'education:submit_work' assignment.id %}" enctype="multipart/form-data" class="submit-form">
+                  {% csrf_token %}
+                  <input class="file-input" type="file" name="file" required>
+                  <input class="input" type="text" name="comment" placeholder="Что исправили">
+                  <button class="btn btn--accent btn--sm" type="submit">Загрузить заново</button>
+                </form>
+              {% endif %}
+            {% else %}
+              <form method="post" action="{% url 'education:submit_work' assignment.id %}" enctype="multipart/form-data" class="submit-form">
+                {% csrf_token %}
+                <input class="file-input" type="file" name="file" required>
+                <input class="input" type="text" name="comment" placeholder="Комментарий к работе">
+                <button class="btn btn--accent btn--sm" type="submit">Загрузить работу</button>
+              </form>
+            {% endif %}
+          {% endwith %}
+        {% elif is_teacher %}
+          <p class="mono dim">работ на проверку: {{ assignment.submissions_count }}</p>
+        {% endif %}
+      </article>
+    {% empty %}
+      <div class="empty"><b>Заданий нет</b><p>{% if is_teacher %}Добавьте задание в панели справа — студенты увидят его на этой странице.{% else %}Преподаватель ещё не добавил задания.{% endif %}</p></div>
+    {% endfor %}
+  </section>
+
+  <div class="side-stack">
+    {% if is_teacher %}
+      <section class="panel">
+        <header class="panel__head">
+          <div class="panel__title"><span class="panel__num mono">02</span><h2>Добавить задание</h2></div>
+        </header>
+        <form method="post" action="{% url 'education:assignment_create' course.id %}" enctype="multipart/form-data" class="form-stack">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="course">
+          <div class="field"><label for="aTitle">Название</label><input class="input" id="aTitle" name="title" required minlength="3"></div>
+          <div class="field"><label for="aDesc">Описание</label><textarea class="textarea" id="aDesc" name="description" rows="3"></textarea></div>
+          <div class="field"><label for="aDue">Срок сдачи</label><input class="input" id="aDue" name="due_date" type="date"></div>
+          <div class="field"><label for="aMaterial">Материал (необязательно)</label><input class="file-input" id="aMaterial" name="material" type="file"></div>
+          <button class="btn btn--accent" type="submit">Добавить задание</button>
+        </form>
+      </section>
+    {% endif %}
+
+    {% if submissions_to_review %}
+      <section class="panel">
+        <header class="panel__head">
+          <div class="panel__title"><span class="panel__num mono">03</span><h2>На проверку</h2></div>
+          <span class="badge badge--accent">{{ submissions_to_review|length }}</span>
+        </header>
+        {% for submission in submissions_to_review %}
+          <article class="assignment">
+            <div class="assignment__head">
+              <div><b>{{ submission.student|fio }}</b><small>{{ submission.assignment.title }} · {{ submission.submitted_at|date:"d.m.Y H:i" }}</small></div>
+              {% if submission.file %}<a class="mono dim" href="{{ submission.file.url }}" target="_blank" rel="noopener">файл ↗</a>{% else %}<span class="mono dim">без файла</span>{% endif %}
+            </div>
+            {% if submission.comment %}<p class="assignment__comment">{{ submission.comment }}</p>{% endif %}
+            <form method="post" action="{% url 'education:review_submission' submission.id %}" class="review-form">
+              {% csrf_token %}
+              <input class="input" name="grade" placeholder="Оценка" list="gradeValues">
+              <input class="input" name="teacher_comment" placeholder="Комментарий">
+              <div class="review-form__actions">
+                <button class="btn btn--accent btn--sm" name="status" value="reviewed" type="submit">Проверить</button>
+                <button class="btn btn--ghost btn--sm" name="status" value="returned" type="submit">На доработку</button>
+              </div>
+            </form>
+          </article>
+        {% endfor %}
+      </section>
+    {% endif %}
+  </div>
+</div>
+
+<datalist id="gradeValues"><option value="5"><option value="4"><option value="3"><option value="2"><option value="зачтено"><option value="не зачтено"></datalist>
+{% endblock %}

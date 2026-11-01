@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Личный кабинет — БГИТУ</title>
+<meta name="description" content="Личный кабинет студента БГИТУ: данные о себе, стипендия, расписание, зачётная книжка, учебный план, справки, портфолио и почта. Учебный демо-макет.">
+<meta name="theme-color" content="#0d0d0d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23ff5a2e'/%3E%3Ctext x='32' y='46' font-family='Arial,sans-serif' font-size='40' font-weight='bold' text-anchor='middle' fill='%230d0d0d'%3EБ%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/css/fonts.css">
+<link rel="stylesheet" href="assets/css/tokens.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/cabinet.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body id="top">
+
+<a class="skip" href="#content">К содержимому</a>
+
+<header class="site-head" id="siteHead">
+  <a class="logo" href="#" data-soon="Главная страница">
+    <svg class="logo__mark" viewBox="0 0 32 32" aria-hidden="true">
+      <rect x="1" y="1" width="30" height="30" rx="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M11.2 7.6h6.9c3.3 0 5.2 1.8 5.2 4.4 0 1.7-.9 3-2.4 3.7 1.9.5 3.1 2 3.1 4.2 0 3-2.2 4.7-5.8 4.7h-7V7.6Zm3.8 2.9v4.1h2.8c1.4 0 2.2-.8 2.2-2.1s-.8-2-2.2-2h-2.8Zm0 7v4.4h3.1c1.5 0 2.4-.8 2.4-2.2s-.9-2.2-2.4-2.2h-3.1Z" fill="currentColor"/>
+    </svg>
+    <span class="logo__word">БГИТУ</span>
+  </a>
+
+  <nav class="head-nav" aria-label="Основная навигация">
+    <a href="#" data-soon="Главная страница">Главная</a>
+    <a href="#" data-soon="Об университете">Университет</a>
+    <a href="#" data-soon="Институты">Институты</a>
+    <a href="#" data-soon="Поступление">Поступление</a>
+    <a href="#" data-soon="Кампус">Кампус</a>
+  </nav>
+
+  <div class="head-tools">
+    <button class="icon-btn icon-btn--dot" type="button" id="bellBtn" data-soon="Уведомления" aria-label="Уведомления">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M18 8a6 6 0 1 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10.3 21a2 2 0 0 0 3.4 0"/>
+      </svg>
+    </button>
+    <button class="btn btn--ghost btn--sm" type="button" id="headAvatar" aria-label="Открыть данные о себе">
+      <span id="headInitials">ПГ</span>
+      <span class="dim" id="headRole">студент</span>
+    </button>
+    <button class="burger" id="burger" type="button" aria-label="Меню" aria-expanded="false" aria-controls="mobileMenu">
+      <span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<div class="menu" id="mobileMenu" aria-hidden="true">
+  <nav class="menu__nav" aria-label="Мобильное меню">
+    <a href="#" data-soon="Главная страница">Главная</a>
+    <a href="#" data-soon="Об университете">Университет</a>
+    <a href="#" data-soon="Институты">Институты</a>
+    <a href="#" data-soon="Поступление">Поступление</a>
+    <a href="#" data-soon="Кампус">Кампус</a>
+    <a href="cabinet.html" aria-current="page">Личный кабинет</a>
+  </nav>
+  <p class="menu__foot mono">Брянск · пр-т Станке Димитрова, 3 · учебный макет</p>
+</div>
+
+<main id="content">
+  <section class="cab-hero" aria-labelledby="cabTitle">
+    <div class="container">
+      <nav class="crumbs mono" aria-label="Хлебные крошки">
+        <a href="#" data-soon="Главная страница">Главная</a><i>/</i><a href="#overview">Личный кабинет</a><i>/</i><span id="crumbCurrent">Обзор</span>
+      </nav>
+
+      <div class="cab-hero__grid" style="margin-top:clamp(24px,4vw,40px)">
+        <div data-reveal>
+          <p class="mono dim" id="heroHello">Георгий, добрый день</p>
+          <div class="cab-hero__kicker">
+            <span class="badge badge--soft" id="heroBadge">демо-режим</span>
+            <span class="mono dim" id="heroDate">пятница, 23 октября 2026</span>
+          </div>
+          <h1 id="cabTitle">Личный кабинет <span class="hl">студента</span></h1>
+          <p class="cab-hero__lead" id="heroLead">Данные о себе, предполагаемая стипендия и расписание группы — на одном экране. Правки профиля сохраняются в этом браузере.</p>
+          <div class="cab-hero__meta mono">
+            <span>группа <span id="heroGroup">ИСТ-201</span></span>
+            <span>ИЭИ · <span id="heroCourse">2</span> курс</span>
+            <span>09.03.02</span>
+          </div>
+        </div>
+
+        <aside class="id-card" data-reveal style="--d:1" aria-label="Карточка студента">
+          <div class="id-card__top">
+            <span class="id-card__avatar" id="idAvatar" aria-hidden="true">ПГ</span>
+            <div>
+              <p class="id-card__name" id="idName">Портнов Георгий Егорович</p>
+              <div class="id-card__role"><span class="badge badge--accent" id="idRole">Студент</span></div>
+            </div>
+          </div>
+          <dl class="id-card__list">
+            <div class="id-card__row"><dt>Группа</dt><dd id="idGroup">ИСТ-201</dd></div>
+            <div class="id-card__row"><dt>Институт</dt><dd id="idInstitute">Инженерно-экономический</dd></div>
+            <div class="id-card__row"><dt>Курс · форма</dt><dd id="idCourseForm">2 курс · очная</dd></div>
+            <div class="id-card__row"><dt>Зачётная книжка</dt><dd id="idRecord">ИСТ-201/24</dd></div>
+          </dl>
+          <p class="id-card__note">Демонстрационные данные. Изменить — в блоке 01 «Данные о себе».</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <div class="container cab-layout">
+    <aside class="cab-nav" aria-label="Разделы личного кабинета">
+      <p class="cab-nav__label mono">разделы</p>
+      <a href="#overview" data-view="overview" aria-current="page"><span class="cab-nav__idx">01</span>Обзор</a>
+      <a href="#profile" data-view="overview" data-anchor="profile"><span class="cab-nav__idx">02</span>Профиль</a>
+      <a href="#stipend" data-view="overview" data-anchor="stipend"><span class="cab-nav__idx">03</span>Стипендия</a>
+      <a href="#schedule" data-view="overview" data-anchor="schedule"><span class="cab-nav__idx">04</span>Расписание</a>
+      <a href="#grades" data-view="grades"><span class="cab-nav__idx">05</span>Оценки</a>
+      <a href="#debts" data-view="debts"><span class="cab-nav__idx">06</span>Задолженности</a>
+      <a href="#plan" data-view="plan"><span class="cab-nav__idx">07</span>Учебный план</a>
+      <a href="#requests" data-view="requests"><span class="cab-nav__idx">08</span>Справки</a>
+      <a href="#portfolio" data-view="portfolio"><span class="cab-nav__idx">09</span>Портфолио</a>
+      <a href="#mail" data-view="mail"><span class="cab-nav__idx">10</span>Почта<span class="cab-nav__count" id="navMailCount" hidden>0</span></a>
+      <div class="cab-nav__sep" aria-hidden="true"></div>
+      <a href="#" class="cab-nav__extra" data-role="teacher" data-soon="Мои дисциплины" hidden><span class="cab-nav__idx">11</span>Мои дисциплины</a>
+      <a href="#" class="cab-nav__extra" data-role="teacher,dean,monitor" data-soon="Ведомости" hidden><span class="cab-nav__idx">12</span>Ведомости</a>
+      <a href="#" class="cab-nav__extra" data-role="dean" data-soon="Заявления студентов" hidden><span class="cab-nav__idx">13</span>Заявления</a>
+      <a href="#" class="cab-nav__extra" data-role="editor,admin" data-soon="Контент сайта" hidden><span class="cab-nav__idx">14</span>Контент сайта</a>
+      <a href="#" class="cab-nav__extra" data-role="rector" data-soon="Сводка по вузу" hidden><span class="cab-nav__idx">15</span>Сводка по вузу</a>
+      <a href="#" class="cab-nav__extra" data-role="admin" data-soon="Пользователи и права" hidden><span class="cab-nav__idx">16</span>Пользователи</a>
+    </aside>
+
+    <div class="cab-main">
+      <!-- ============ ОБЗОР ============ -->
+      <div class="view" id="view-overview" data-view-panel="overview">
+        <section class="panel" id="profile" aria-labelledby="profileTitle" data-reveal>
+          <header class="panel__head">
+            <div class="panel__title">
+              <span class="panel__num mono">01</span>
+              <h2 id="profileTitle">Данные о себе</h2>
+            </div>
+            <button class="btn btn--ghost btn--sm" type="button" id="editProfileBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/>
+              </svg>
+              Редактировать
+            </button>
+          </header>
+
+          <dl class="profile-grid" id="profileGrid">
+            <div class="profile-row profile-row--wide"><dt>ФИО</dt><dd data-profile="fullName">Портнов Георгий Егорович</dd></div>
+            <div class="profile-row"><dt>Дата рождения</dt><dd data-profile="birthDate">30 апреля 2007</dd></div>
+            <div class="profile-row"><dt>Группа</dt><dd data-profile="group">ИСТ-201</dd></div>
+            <div class="profile-row"><dt>Институт</dt><dd data-profile="institute">Инженерно-экономический институт</dd></div>
+            <div class="profile-row"><dt>Направление</dt><dd data-profile="program">09.03.02 «Информационные системы и технологии»</dd></div>
+            <div class="profile-row"><dt>Курс</dt><dd data-profile="course">2 курс</dd></div>
+            <div class="profile-row"><dt>Форма обучения</dt><dd data-profile="form">Очная</dd></div>
+            <div class="profile-row"><dt>Основа</dt><dd data-profile="basis">Бюджетная</dd></div>
+            <div class="profile-row"><dt>E-mail</dt><dd data-profile="email">g.portnov@bgitu.ru</dd></div>
+            <div class="profile-row"><dt>Телефон</dt><dd data-profile="phone">не указан</dd></div>
+            <div class="profile-row profile-row--wide">
+              <dt>Роль в системе</dt>
+              <dd class="profile-role">
+                <span class="badge badge--accent" data-profile="roleLabel">Студент</span>
+                <span class="muted" data-role-note>дашборд, стипендия, расписание, оценки, справки</span>
+              </dd>
+            </div>
+          </dl>
+          <p class="profile-note">Демо: изменения сохраняются в localStorage этого браузера. Роль меняет набор разделов в навигации — это показывает, как кабинет выглядит для разных участников.</p>
+        </section>
+
+        <section class="panel" id="stipend" aria-labelledby="stipendTitle" data-reveal>
+          <header class="panel__head">
+            <div class="panel__title">
+              <span class="panel__num mono">02</span>
+              <h2 id="stipendTitle">Предполагаемая стипендия</h2>
+            </div>
+            <span class="mono dim">ноябрь 2026 · прогноз</span>
+          </header>
+
+          <div class="stip-top">
+            <div>
+              <p class="mono dim">начисление за месяц</p>
+              <p class="muted" style="margin-top:8px;max-width:44ch">Сумма пересчитывается при изменении условий ниже. Это прогноз, а не бухгалтерское начисление.</p>
+            </div>
+            <p class="stip-total"><span id="stipTotal">8 874</span> ₽<small>предполагаемая сумма в месяц</small></p>
+          </div>
+
+          <div class="stip-rows">
+            <div class="stip-row">
+              <span>Государственная академическая стипендия<small id="acadNote">повышенная, коэффициент ×1,8</small></span>
+              <b id="acadSum">4 374 ₽</b>
+            </div>
+            <div class="stip-row">
+              <span>ПГАС — повышение за достижения<small id="pgasNote">научная деятельность</small></span>
+              <b id="pgasSum">4 500 ₽</b>
+            </div>
+            <div class="stip-row">
+              <span>Социальная стипендия<small id="socialNote">не назначена</small></span>
+              <b id="socialSum">0 ₽</b>
+            </div>
+            <div class="stip-row stip-row--sum">
+              <span>итого за месяц</span>
+              <b id="stipSumTotal">8 874 ₽</b>
+            </div>
+          </div>
+
+          <div class="stip-controls">
+            <label class="check">
+              <input type="checkbox" id="acadBoost" checked>
+              <span>Повышенная академическая<small>оценки «хорошо» и «отлично» — коэффициент ×1,8</small></span>
+            </label>
+            <label class="check">
+              <input type="checkbox" id="socialPay">
+              <span>Социальная стипендия<small>+2 700 ₽ при подтверждённой льготе</small></span>
+            </label>
+            <div class="field">
+              <label for="pgasSelect">ПГАС — основание</label>
+              <select class="select" id="pgasSelect">
+                <option value="science" selected>Наука · 4 500 ₽</option>
+                <option value="sport">Спорт · 3 000 ₽</option>
+                <option value="art">Творчество · 3 000 ₽</option>
+                <option value="volunteer">Волонтёрство · 2 000 ₽</option>
+                <option value="none">Нет</option>
+              </select>
+            </div>
+          </div>
+
+          <p class="stip-hint"><b>Как увеличить:</b> ПГАС назначается по одному основанию за семестр, социальная — при подтверждённой льготе. Добавьте достижение в портфолио до конца семестра: стипендиальная комиссия рассматривает заявки по документам. Суммы в макете демонстрационные.</p>
+        </section>
+
+        <section class="panel" id="schedule" aria-labelledby="scheduleTitle" data-reveal>
+          <header class="panel__head">
+            <div class="panel__title">
+              <span class="panel__num mono">03</span>
+              <h2 id="scheduleTitle">Расписание группы</h2>
+            </div>
+            <span class="mono dim" id="schedMeta">ИЭИ · корпус №2</span>
+          </header>
+
+          <div class="sched-toolbar">
+            <div class="sched-tabs" role="group" aria-label="Неделя расписания">
+              <button class="sched-tab" type="button" data-week="0" aria-pressed="true">Эта неделя</button>
+              <button class="sched-tab" type="button" data-week="1" aria-pressed="false">Следующая</button>
+            </div>
+            <div class="sched-toolbar__right">
+              <div class="field">
+                <label class="visually-hidden" for="groupSelect">Группа</label>
+                <select class="select" id="groupSelect" style="min-width:190px"></select>
+              </div>
+              <button class="btn btn--ghost btn--sm" type="button" id="icsBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M12 14v5M9.5 16.5 12 19l2.5-2.5"/>
+                </svg>
+                В календарь (.ics)
+              </button>
+            </div>
+          </div>
+
+          <div class="sched-grid" id="schedGrid"></div>
+          <p class="sched-bells mono" id="bells">звонки корпуса №2: 8:50–10:25 · 10:35–12:10 · 12:20–13:55 · 14:30–16:05 · 16:15–17:50</p>
+        </section>
+
+        <section class="panel" id="tasks" aria-labelledby="tasksTitle" data-reveal>
+          <header class="panel__head">
+            <div class="panel__title">
+              <span class="panel__num mono">04</span>
+              <h2 id="tasksTitle">Что нужно сделать</h2>
+            </div>
+            <span class="mono dim" id="taskCount">1 из 4</span>
+          </header>
+          <div class="task-progress" aria-hidden="true">
+            <div class="task-progress__bar"><i id="taskBar"></i></div>
+          </div>
+          <div id="taskList"></div>
+        </section>
+
+        <section class="panel" id="quick" aria-labelledby="quickTitle" data-reveal>
+          <header class="panel__head">
+            <div class="panel__title">
+              <span class="panel__num mono">05</span>
+              <h2 id="quickTitle">Разделы кабинета</h2>
+            </div>
+            <span class="mono dim">демо-режим</span>
+          </header>
+          <div class="quick-grid">
+            <a class="quick-card" href="#grades">
+              <span class="mono dim">оценки</span>
+              <span class="quick-card__top"><b id="quickAvg">4,62</b><span class="muted">средний балл</span></span>
+              <span class="quick-card__link">Открыть →</span>
+            </a>
+            <a class="quick-card" href="#debts">
+              <span class="mono dim">задолженности</span>
+              <span class="quick-card__top"><b id="quickDebts">0</b><span class="muted">всё закрыто</span></span>
+              <span class="quick-card__link">Открыть →</span>
+            </a>
+            <a class="quick-card" href="#plan">
+              <span class="mono dim">учебный план</span>
+              <span class="quick-card__top"><b id="quickPlan">68%</b><span class="muted">2 курс из 4</span></span>
+              <span class="quick-card__link">Открыть →</span>
+            </a>
+            <a class="quick-card" href="#requests">
+              <span class="mono dim">справки</span>
+              <span class="quick-card__top"><b id="quickRequests">2</b><span class="muted">в работе</span></span>
+              <span class="quick-card__link">Открыть →</span>
+            </a>
+            <a class="quick-card" href="https://eos.bgitu.ru/" target="_blank" rel="noopener">
+              <span class="mono dim">эос бгиту</span>
+              <span class="quick-card__top"><b>↗</b><span class="muted">eos.bgitu.ru</span></span>
+              <span class="quick-card__link">Перейти →</span>
+            </a>
+            <a class="quick-card" href="#portfolio">
+              <span class="mono dim">портфолио</span>
+              <span class="quick-card__top"><b id="quickPortfolio">3</b><span class="muted">достижения</span></span>
+              <span class="quick-card__link">Открыть →</span>
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============ ОЦЕНКИ ============ -->
+      <div class="view" id="view-grades" data-view-panel="grades" hidden>
+        <section class="panel">
+          <header class="panel__head">
+            <div class="panel__title">
+              <span class="panel__num mono">01</span>
+              <h2>Зачётная книжка</h2>
+            </div>
+            <span class="mono dim" id="gradesMeta">№ ИСТ-201/24</span>
+          </header>
+
+          <div class="stat-strip" id="gradeStats"></div>
+
+          <div class="sched-tabs term-tabs" id="termTabs" role="group" aria-label="Семестр"></div>
+
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th scope="col">Дисциплина</th>
+                  <th scope="col">Контроль</th>
+                  <th scope="col" class="ta-r">ЗЕ</th>
+                  <th scope="col" class="ta-r">Оценка</th>
+                </tr>
+              </thead>
+              <tbody id="gradesBody"></tbody>
+            </table>
+          </div>
+
+          <div class="panel-foot" id="gradesFoot"></div>
+          <p class="panel-note" id="gradesNote"></p>
+        </section>
+
+        <section class="panel">
+          <header class="panel__head">
+            <div class="panel__title">
+              <span class="panel__num mono">02</span>
+              <h2>Средний балл по семестрам</h2>
+            </div>
+            <span class="mono dim">только числовые оценки</span>
+          </header>
+          <div class="grade-chart" id="gradeChart"></div>
+        </section>
+      </div>
+
+      <!-- ============ ЗАДОЛЖЕННОСТИ ============ -->
+      <div class="view" id="view-debts" data-view-panel="debts" hidden>
+        <section class="panel">
+          <header class="panel__head">
+            <div class="panel__title">
+              <span class="panel__num mono">01</span>
+              <h2>Задолженности</h2>
+            </div>
+            <span class="badge badge--soft" id="debtBadge">всё закрыто</span>
+          </header>
+
+          <div id="debtsOpen"></div>
+
+          <h3 class="sub-title">История пересдач</h3>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th scope="col">Дисциплина</th>
+                  <th scope="col">Семестр</th>
+                  <th scope="col">Закрыта</th>
+                  <th scope="col" class="ta-r">Оценка</th>
+                </tr>
+              </thead>
+              <tbody id="debtsHistory"></tbody>
+            </table>
+          </div>
+
+          <p class="panel-note" id="debtsRules"></p>
+        </section>
+      </div>
+
+      <!-- ============ УЧЕБНЫЙ ПЛАН ============ -->
+      <div class="view" id="view-plan" data-view-panel="plan" hidden>
+        <section class="panel">
+          <header class="panel__head">
+            <div class="panel__title">
+              <span class="panel__num mono">01</span>
+              <h2>Учебный план</h2>
+            </div>
+            <span class="mono dim" id="planMeta">2 курс · 2026/27</span>
+          </header>
+
+          <div class="plan-summary">
+            <div class="plan-summary__top">
+              <div>
+                <p class="mono dim">освоено</p>
+                <p class="plan-percent"><span id="planPercent">0</span><small>%</small></p>
+              </div>
+              <p class="plan-credits mono" id="planCredits">0 из 240 ЗЕ</p>
+            </div>
+            <div class="task-progress__bar plan-bar" aria-hidden="true"><i id="planBar"></i></div>
+            <div class="plan-facts" id="planFacts"></div>
+          </div>
+
+          <div class="plan-list" id="planList"></div>
+          <p class="panel-note" id="planNote"></p>
+        </section>
+      </div>
+
+      <!-- ============ СПРАВКИ ============ -->
+      <div class="view" id="view-requests" data-view-panel="requests" hidden>
+        <section class="panel">
+          <header class="panel__head">
+            <div class="panel__title">
+              <span class="panel__num mono">01</span>
+              <h2>Мои заявки</h2>
+            </div>
+            <button class="btn btn--ghost btn--sm" type="button" id="newRequestBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+              Новая заявка
+            </button>
+          </header>
+
+          <div class="req-list" id="reqList"></div>
+          <p class="panel-note">Демо: заявка создаётся в этом браузере и выглядит как настоящая, но никуда не отправляется. В рабочем кабинете заявка уходит в деканат и меняет статус по мере обработки.</p>
+        </section>
+
+        <section class="panel">
+          <header class="panel__head">
+            <div class="panel__title">
+              <span class="panel__num mono">02</span>
+              <h2>Что можно заказать</h2>
+            </div>
+            <span class="mono dim">сроки — рабочие дни</span>
+          </header>
+          <div class="req-catalog" id="reqCatalog"></div>
+        </section>
+      </div>
+
+      <!-- ============ ПОРТФОЛИО ============ -->
+      <div class="view" id="view-portfolio" data-view-panel="portfolio" hidden>
+        <section class="panel">
+          <header class="panel__head">
+            <div class="panel__title">
+              <span class="panel__num mono">01</span>
+              <h2>Портфолио достижений</h2>
+            </div>
+            <button class="btn btn--ghost btn--sm" type="button" id="addPortfolioBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 5v14M5 12h14"/>
+              </svg>
+              Добавить
+            </button>
+          </header>
+
+          <div class="pf-stats" id="pfStats"></div>
+          <div class="pf-grid" id="pfGrid"></div>
+          <p class="panel-note" id="pfNote"></p>
+        </section>
+
+        <section class="panel">
+          <header class="panel__head">
+            <div class="panel__title">
+              <span class="panel__num mono">02</span>
+              <h2>Как это влияет на стипендию</h2>
+            </div>
+          </header>
+          <div class="pf-rules">
+            <p><b>ПГАС</b> назначается по одному основанию за семестр: наука, спорт, творчество или волонтёрство. Комиссия смотрит на уровень мероприятия и подтверждающие документы.</p>
+            <p><b>Портфолио</b> — это не приказ о выплате. Записи со статусом «подтверждено» попадают в выписку для стипендиальной комиссии; «на проверке» ждут документа.</p>
+            <p><b>Что приложить:</b> диплом, сертификат или скриншот публикации. Оригиналы — в деканат, копию — в портфолио.</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- ============ ПОЧТА ============ -->
+      <div class="view" id="view-mail" data-view-panel="mail" hidden>
+        <section class="panel">
+          <header class="panel__head">
+            <div class="panel__title">
+              <span class="panel__num mono">01</span>
+              <h2>Почта</h2>
+            </div>
+            <span class="mono dim" id="mailMeta">входящие</span>
+          </header>
+
+          <div class="mail-layout">
+            <div class="mail-list" id="mailList"></div>
+            <article class="mail-read" id="mailRead" aria-live="polite"></article>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <a class="logo" href="#" data-soon="Главная страница">
+          <svg class="logo__mark" viewBox="0 0 32 32" aria-hidden="true">
+            <rect x="1" y="1" width="30" height="30" rx="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M11.2 7.6h6.9c3.3 0 5.2 1.8 5.2 4.4 0 1.7-.9 3-2.4 3.7 1.9.5 3.1 2 3.1 4.2 0 3-2.2 4.7-5.8 4.7h-7V7.6Zm3.8 2.9v4.1h2.8c1.4 0 2.2-.8 2.2-2.1s-.8-2-2.2-2h-2.8Zm0 7v4.4h3.1c1.5 0 2.4-.8 2.4-2.2s-.9-2.2-2.4-2.2h-3.1Z" fill="currentColor"/>
+          </svg>
+          <span class="logo__word">БГИТУ</span>
+        </a>
+        <p style="margin-top:12px;max-width:36ch">Личный кабинет — учебный макет интерфейса. Не является официальным сервисом университета.</p>
+      </div>
+      <div>
+        <h3>Разделы</h3>
+        <p><a href="#profile">Данные о себе</a></p>
+        <p><a href="#grades">Оценки</a></p>
+        <p><a href="#schedule">Расписание</a></p>
+        <p><a href="https://eos.bgitu.ru/" target="_blank" rel="noopener">ЭОС БГИТУ ↗</a></p>
+      </div>
+      <div>
+        <h3>Поддержка</h3>
+        <p>Учебный отдел · корпус №1, ауд. 238</p>
+        <p><a href="mailto:oi@bgitu.ru">oi@bgitu.ru</a></p>
+        <p>Брянск · пр-т Станке Димитрова, 3</p>
+      </div>
+    </div>
+    <div class="foot-bottom mono">
+      <span>© <span id="year">2026</span> БГИТУ · учебный макет</span>
+      <span>демо-данные · не официальный сайт</span>
+    </div>
+  </div>
+</footer>
+
+<dialog class="dialog" id="profileDialog" aria-labelledby="profileDialogTitle">
+  <form id="profileForm" novalidate>
+    <div class="dialog__head">
+      <h2 id="profileDialogTitle">Данные о себе</h2>
+      <button class="dialog__close" type="button" id="closeDialog" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="dialog__body">
+      <p class="dialog__note" id="formError" role="alert" hidden></p>
+      <div class="form-grid">
+        <div class="field field--wide">
+          <label for="fFullName">ФИО *</label>
+          <input class="input" id="fFullName" name="fullName" type="text" required autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="fBirth">Дата рождения</label>
+          <input class="input" id="fBirth" name="birthDate" type="date">
+        </div>
+        <div class="field">
+          <label for="fEmail">E-mail *</label>
+          <input class="input" id="fEmail" name="email" type="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="fPhone">Телефон</label>
+          <input class="input" id="fPhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__">
+        </div>
+        <div class="field">
+          <label for="fGroup">Группа</label>
+          <select class="select" id="fGroup" name="group"></select>
+        </div>
+        <div class="field">
+          <label for="fCourse">Курс</label>
+          <select class="select" id="fCourse" name="course">
+            <option value="1">1 курс</option>
+            <option value="2" selected>2 курс</option>
+            <option value="3">3 курс</option>
+            <option value="4">4 курс</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fForm">Форма обучения</label>
+          <select class="select" id="fForm" name="form">
+            <option>Очная</option>
+            <option>Очно-заочная</option>
+            <option>Заочная</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fBasis">Основа обучения</label>
+          <select class="select" id="fBasis" name="basis">
+            <option>Бюджетная</option>
+            <option>Платная</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fRole">Роль в системе</label>
+          <select class="select" id="fRole" name="role"></select>
+        </div>
+        <p class="field--wide field__hint" id="roleHint">Роль меняет набор разделов кабинета — демонстрация прав доступа.</p>
+      </div>
+    </div>
+
+    <div class="dialog__foot">
+      <button class="btn btn--ghost" type="button" id="cancelDialog">Отмена</button>
+      <button class="btn btn--accent" type="submit">Сохранить</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="dialog" id="requestDialog" aria-labelledby="requestDialogTitle">
+  <form id="requestForm" novalidate>
+    <div class="dialog__head">
+      <h2 id="requestDialogTitle">Новая заявка</h2>
+      <button class="dialog__close" type="button" id="closeRequestDialog" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="dialog__body">
+      <p class="dialog__note" id="requestError" role="alert" hidden></p>
+      <div class="form-grid">
+        <div class="field field--wide">
+          <label for="fRequestType">Документ *</label>
+          <select class="select" id="fRequestType" name="type" required></select>
+        </div>
+        <div class="field field--wide">
+          <label for="fRequestPurpose">Для чего *</label>
+          <input class="input" id="fRequestPurpose" name="purpose" type="text" placeholder="Например: для банка" required>
+        </div>
+        <div class="field">
+          <label for="fDelivery">Как получить</label>
+          <select class="select" id="fDelivery" name="delivery">
+            <option value="электронно">Электронно</option>
+            <option value="в деканате">В деканате</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="fRequestComment">Комментарий</label>
+          <input class="input" id="fRequestComment" name="comment" type="text" placeholder="Необязательно">
+        </div>
+      </div>
+    </div>
+
+    <div class="dialog__foot">
+      <button class="btn btn--ghost" type="button" id="cancelRequestDialog">Отмена</button>
+      <button class="btn btn--accent" type="submit">Отправить в деканат</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog class="dialog" id="portfolioDialog" aria-labelledby="portfolioDialogTitle">
+  <form id="portfolioForm" novalidate>
+    <div class="dialog__head">
+      <h2 id="portfolioDialogTitle">Новое достижение</h2>
+      <button class="dialog__close" type="button" id="closePortfolioDialog" aria-label="Закрыть">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+
+    <div class="dialog__body">
+      <p class="dialog__note" id="pfError" role="alert" hidden></p>
+      <div class="form-grid">
+        <div class="field field--wide">
+          <label for="fPfTitle">Название *</label>
+          <input class="input" id="fPfTitle" name="title" type="text" placeholder="Например: призёр олимпиады по программированию" required>
+        </div>
+        <div class="field">
+          <label for="fPfCategory">Категория</label>
+          <select class="select" id="fPfCategory" name="category"></select>
+        </div>
+        <div class="field">
+          <label for="fPfLevel">Уровень</label>
+          <select class="select" id="fPfLevel" name="level"></select>
+        </div>
+        <div class="field">
+          <label for="fPfDate">Дата</label>
+          <input class="input" id="fPfDate" name="date" type="date">
+        </div>
+        <div class="field">
+          <label for="fPfNote">Коротко о достижении</label>
+          <input class="input" id="fPfNote" name="note" type="text" placeholder="Место, номинация, проект">
+        </div>
+      </div>
+    </div>
+
+    <div class="dialog__foot">
+      <button class="btn btn--ghost" type="button" id="cancelPortfolioDialog">Отмена</button>
+      <button class="btn btn--accent" type="submit">Добавить</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/js/data.js"></script>
+<script src="assets/js/data-portal.js"></script>
+<script src="assets/js/cabinet.js"></script>
+</body>
+</html>

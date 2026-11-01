@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Вход{% endblock %} — БГИТУ</title>
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/portal.css' %}">
+</head>
+<body class="auth-page">
+<div class="auth-shell">
+  <aside class="auth-aside">
+    <div>
+      <a class="logo auth-logo" href="/">
+        <svg class="logo__mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect x="1" y="1" width="30" height="30" rx="9" fill="none" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M11.2 7.6h6.9c3.3 0 5.2 1.8 5.2 4.4 0 1.7-.9 3-2.4 3.7 1.9.5 3.1 2 3.1 4.2 0 3-2.2 4.7-5.8 4.7h-7V7.6Zm3.8 2.9v4.1h2.8c1.4 0 2.2-.8 2.2-2.1s-.8-2-2.2-2h-2.8Zm0 7v4.4h3.1c1.5 0 2.4-.8 2.4-2.2s-.9-2.2-2.4-2.2h-3.1Z" fill="currentColor"/>
+        </svg>
+        <span class="logo__word">БГИТУ</span>
+      </a>
+      <p class="mono dim auth-kicker">личный кабинет · 2026</p>
+      <p class="auth-display">Учёба<br>в одном месте</p>
+      <p class="auth-lead">Расписание, курсы, работы и оценки — без бумажной волокиты.</p>
+    </div>
+    <ul class="auth-points">
+      <li>Расписание своей группы</li>
+      <li>Курсы, задания и загрузка работ</li>
+      <li>Роли и заявки — от студента до разработчика</li>
+    </ul>
+    <p class="mono dim auth-foot">Брянск · БГИТУ</p>
+  </aside>
+
+  <main class="auth-main">
+    <section class="auth-card">
+      {% block auth_content %}{% endblock %}
+    </section>
+  </main>
+</div>
+</body>
+</html>

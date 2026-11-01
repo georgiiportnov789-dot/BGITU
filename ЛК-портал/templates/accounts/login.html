@@ -1,0 +1,40 @@
+{% extends 'accounts/auth_base.html' %}
+{% block title %}Вход{% endblock %}
+{% block auth_content %}
+<p class="mono dim auth-kicker">вход</p>
+<h1>Вход в кабинет</h1>
+<p class="auth-lead">Студенты, преподаватели и сотрудники входят под своей ролью.</p>
+
+{% if messages %}
+  <div class="flash-stack" role="status" aria-live="polite">
+    {% for message in messages %}<div class="flash flash--{{ message.tags|default:'info' }}">{{ message }}</div>{% endfor %}
+  </div>
+{% endif %}
+
+<form method="post" class="auth-form">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{{ next }}">
+  <div class="field">
+    <label for="username">Логин</label>
+    <input class="input" id="username" name="username" type="text" autocomplete="username" required autofocus>
+  </div>
+  <div class="field">
+    <label for="password">Пароль</label>
+    <input class="input" id="password" name="password" type="password" autocomplete="current-password" required>
+  </div>
+  <button class="btn btn--accent btn--block" type="submit">Войти</button>
+</form>
+
+<p class="auth-alt">Нет аккаунта? <a href="{% url 'accounts:register' %}">Зарегистрироваться</a></p>
+
+<details class="auth-demo">
+  <summary class="mono dim">демо-доступы · пароль demo12345</summary>
+  <ul>
+    <li><b>student</b> — студент ИСТ-201</li>
+    <li><b>teacher</b> — преподаватель</li>
+    <li><b>dean</b> — деканат</li>
+    <li><b>admin</b> — администратор</li>
+    <li><b>developer</b> — разработчик (полный доступ)</li>
+  </ul>
+</details>
+{% endblock %}

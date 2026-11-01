@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load bgitu %}
+{% block title %}Заявки на роли{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="mono dim">доступ и права</p>
+  <h1>{% if can_review %}Заявки на роли{% else %}Мои заявки{% endif %}</h1>
+  <p class="muted">{% if can_review %}Одобрение меняет роль пользователя. Роль разработчика может выдать только разработчик.{% else %}Статусы ваших заявок на роли.{% endif %}</p>
+</div>
+
+{% if can_review %}
+  <section class="panel">
+    <header class="panel__head">
+      <div class="panel__title"><span class="panel__num mono">01</span><h2>На рассмотрении</h2></div>
+      <span class="badge badge--accent">{{ pending_count }}</span>
+    </header>
+    {% for request in requests %}
+      {% if request.status == 'pending' %}
+        <article class="assignment">
+          <div class="assignment__head">
+            <div>
+              <b>{{ request.user|fio }}</b>
+              <small>просит роль «{{ request.role.name }}» · {{ request.created_at|date:"d.m.Y H:i" }}</small>
+            </div>
+            <span class="badge">{{ request.role.code }}</span>
+          </div>
+          {% if request.comment %}<p class="assignment__comment">{{ request.comment }}</p>{% endif %}
+          <form method="post" action="{% url 'accounts:role_request_review' request.id 'approve' %}" class="review-form">
+            {% csrf_token %}
+            <input class="input" name="review_comment" placeholder="Комментарий (необязательно)">
+            <div class="review-form__actions">
+              <button class="btn btn--accent btn--sm" type="submit">Одобрить</button>
+              <button class="btn btn--ghost btn--sm" type="submit" formaction="{% url 'accounts:role_request_review' request.id 'reject' %}">Отклонить</button>
+            </div>
+          </form>
+        </article>
+      {% endif %}
+    {% empty %}
+      <div class="empty"><b>Заявок нет</b><p>Новые заявки появятся здесь.</p></div>
+    {% endfor %}
+  </section>
+{% endif %}
+
+<section class="panel">
+  <header class="panel__head">
+    <div class="panel__title"><span class="panel__num mono">02</span><h2>История</h2></div>
+    <span class="mono dim">{{ requests|length }}</span>
+  </header>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Пользователь</th><th>Роль</th><th>Создана</th><th>Статус</th><th>Проверил</th></tr></thead>
+      <tbody>
+        {% for request in requests %}
+          <tr>
+            <td>{{ request.user|fio }}</td>
+            <td>{{ request.role.name }}</td>
+            <td>{{ request.created_at|date:"d.m.Y H:i" }}</td>
+            <td><span class="req-status req-status--{% if request.status == 'approved' %}ready{% elif request.status == 'rejected' %}done{% else %}work{% endif %}">{{ request.get_status_display }}</span></td>
+            <td>{% if request.reviewed_by %}{{ request.reviewed_by|fio }}{% else %}—{% endif %}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="muted">Заявок пока нет.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

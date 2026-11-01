@@ -1,0 +1,59 @@
+{% extends 'accounts/auth_base.html' %}
+{% block title %}Регистрация{% endblock %}
+{% block auth_content %}
+<p class="mono dim auth-kicker">регистрация</p>
+<h1>Создать кабинет</h1>
+<p class="auth-lead">Заполните данные — роль «Студент» назначится автоматически. Другую роль можно запросить в кабинете.</p>
+
+{% if errors %}
+  <div class="flash-stack" role="alert">
+    {% for error in errors %}<div class="flash flash--error">{{ error }}</div>{% endfor %}
+  </div>
+{% endif %}
+
+<form method="post" class="auth-form" novalidate>
+  {% csrf_token %}
+  <div class="auth-form__row">
+    <div class="field">
+      <label for="last_name">Фамилия</label>
+      <input class="input" id="last_name" name="last_name" type="text" autocomplete="family-name" value="{{ form_data.last_name|default:'' }}" required>
+    </div>
+    <div class="field">
+      <label for="first_name">Имя</label>
+      <input class="input" id="first_name" name="first_name" type="text" autocomplete="given-name" value="{{ form_data.first_name|default:'' }}" required>
+    </div>
+  </div>
+  <div class="field">
+    <label for="username">Логин</label>
+    <input class="input" id="username" name="username" type="text" autocomplete="username" value="{{ form_data.username|default:'' }}" required>
+    <small class="field-hint">3–30 символов: латиница, цифры, точка, дефис, подчёркивание.</small>
+  </div>
+  <div class="field">
+    <label for="email">E-mail</label>
+    <input class="input" id="email" name="email" type="email" autocomplete="email" value="{{ form_data.email|default:'' }}" required>
+  </div>
+  <div class="field">
+    <label for="group">Группа <span class="dim">(если учитесь)</span></label>
+    <select class="input" id="group" name="group">
+      <option value="">— не выбрана —</option>
+      {% for group in groups %}
+        <option value="{{ group.id }}" {% if form_data.group == group.id|stringformat:'s' %}selected{% endif %}>{{ group.code }} · {{ group.course }} курс</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="auth-form__row">
+    <div class="field">
+      <label for="password1">Пароль</label>
+      <input class="input" id="password1" name="password1" type="password" autocomplete="new-password" required>
+    </div>
+    <div class="field">
+      <label for="password2">Повторите</label>
+      <input class="input" id="password2" name="password2" type="password" autocomplete="new-password" required>
+    </div>
+  </div>
+  <small class="field-hint">Не короче 8 символов, не только цифры.</small>
+  <button class="btn btn--accent btn--block" type="submit">Зарегистрироваться</button>
+</form>
+
+<p class="auth-alt">Уже есть аккаунт? <a href="{% url 'accounts:login' %}">Войти</a></p>
+{% endblock %}

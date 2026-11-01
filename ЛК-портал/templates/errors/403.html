@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>403 — нет доступа</title>
+  <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+  <link rel="stylesheet" href="{% static 'css/tokens.css' %}">
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <link rel="stylesheet" href="{% static 'css/components.css' %}">
+  <link rel="stylesheet" href="{% static 'css/portal.css' %}">
+</head>
+<body class="auth-page">
+  <main class="auth-card error-card">
+    <p class="mono dim">403</p>
+    <h1>Нет доступа</h1>
+    <p class="muted">У вашей роли нет нужного права. Запросите роль в кабинете или обратитесь к администратору.</p>
+    <a class="btn btn--accent" href="/cabinet/">Вернуться в кабинет</a>
+  </main>
+</body>
+</html>

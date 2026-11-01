@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load bgitu %}
+{% block title %}Журнал · {{ course.title }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="mono dim">{{ course.code }} · {{ course.group.code }}</p>
+  <h1>Журнал курса</h1>
+  <p class="muted">Оценки, посещаемость и задания. Изменения сразу сохраняются в базе.</p>
+</div>
+
+<div class="action-row">
+  <a class="btn btn--accent" href="{% url 'education:attendance' course.id %}">Отметить посещаемость</a>
+  <a class="btn btn--ghost" href="{% url 'education:course_detail' course.id %}">Страница курса</a>
+</div>
+
+<section class="panel">
+  <header class="panel__head">
+    <div class="panel__title"><span class="panel__num mono">01</span><h2>Студенты</h2></div>
+    <span class="mono dim">{{ rows|length }} · {{ course.group.code }}</span>
+  </header>
+
+  {% if rows %}
+    <div class="table-wrap">
+      <table class="data-table journal-table">
+        <thead>
+          <tr>
+            <th>Студент</th>
+            <th>Оценка</th>
+            <th>Посещаемость</th>
+            <th>Выставить</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+            <tr>
+              <td>
+                {{ row.student|fio }}
+                <small class="cell-sub">{% if row.profile.record_book %}зачётка {{ row.profile.record_book }}{% else %}без зачётки{% endif %}</small>
+              </td>
+              <td>
+                {% if row.exam %}
+                  <span class="grade {% if row.exam.value == '5' %}grade--5{% elif row.exam.value == '4' %}grade--4{% elif row.exam.is_fail %}grade--fail{% endif %}">{{ row.exam.value }}</span>
+                  <small class="cell-sub">{{ row.exam.get_kind_display }} · {{ row.exam.date|date:"d.m.Y" }}</small>
+                {% else %}<span class="dim">—</span>{% endif %}
+              </td>
+              <td>
+                <span class="mono dim">был {{ row.attendance.present }} · нет {{ row.attendance.absent }} · опоздал {{ row.attendance.late }}</span>
+              </td>
+              <td>
+                <form method="post" action="{% url 'education:set_grade' course.id %}" class="inline-form">
+                  {% csrf_token %}
+                  <input type="hidden" name="student" value="{{ row.student.id }}">
+                  <select class="select select--sm" name="kind" aria-label="Вид контроля">
+                    {% for value, label in kinds %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+                  </select>
+                  <select class="select select--sm" name="value" aria-label="Оценка">
+                    {% for value, label in values %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+                  </select>
+                  <input class="input input--sm" type="date" name="date" value="{{ today|date:'Y-m-d' }}" aria-label="Дата">
+                  <button class="btn btn--ghost btn--sm" type="submit">Сохранить</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty"><b>Студентов нет</b><p>На курс никто не зачислен — проверьте группу курса.</p></div>
+  {% endif %}
+</section>
+
+<section class="panel">
+  <header class="panel__head">
+    <div class="panel__title"><span class="panel__num mono">02</span><h2>Добавить задание</h2></div>
+    <span class="mono dim">{{ assignments|length }}</span>
+  </header>
+  <form method="post" action="{% url 'education:assignment_create' course.id %}" enctype="multipart/form-data" class="form-grid">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="journal">
+    <div class="field"><label for="jTitle">Название</label><input class="input" id="jTitle" name="title" required minlength="3"></div>
+    <div class="field"><label for="jDue">Срок</label><input class="input" id="jDue" name="due_date" type="date"></div>
+    <div class="field field--wide"><label for="jDesc">Описание</label><textarea class="textarea" id="jDesc" name="description" rows="3"></textarea></div>
+    <div class="field"><label for="jMaterial">Материал</label><input class="file-input" id="jMaterial" name="material" type="file"></div>
+    <div class="field field--wide"><button class="btn btn--accent" type="submit">Добавить</button></div>
+  </form>
+</section>
+{% endblock %}

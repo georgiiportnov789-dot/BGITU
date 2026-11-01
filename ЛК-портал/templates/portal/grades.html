@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load bgitu %}
+{% block title %}Оценки{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="mono dim">зачётная книжка</p>
+  <h1>Оценки</h1>
+  <p class="muted">Оценки выставляют преподаватели в журнале курса. Здесь — только ваши записи из БД.</p>
+</div>
+
+<div class="stat-strip">
+  <div class="stat"><p class="mono dim">средний балл</p><b>{{ average|ru_num }}</b><small>числовые оценки</small></div>
+  <div class="stat"><p class="mono dim">записей</p><b>{{ grades_count }}</b><small>экзамены, зачёты, курсовые</small></div>
+  <div class="stat"><p class="mono dim">задолженности</p><b>{{ debts|length }}</b><small>оценки «2» и «не зачтено»</small></div>
+  <div class="stat"><p class="mono dim">дисциплин</p><b>{{ rows|length }}</b><small>с оценками</small></div>
+</div>
+
+{% if debts %}
+<section class="panel">
+  <header class="panel__head">
+    <div class="panel__title"><span class="panel__num mono">!</span><h2>Незакрытые</h2></div>
+    <span class="badge badge--accent">{{ debts|length }}</span>
+  </header>
+  {% for grade in debts %}
+    <div class="course-line">
+      <div><b>{{ grade.course.title }}</b><small>{{ grade.get_kind_display }} · {{ grade.date|date:"d.m.Y" }}</small></div>
+      <span class="req-status req-status--work">{{ grade.value }}</span>
+    </div>
+  {% endfor %}
+  <p class="panel-note">Пересдача назначается преподавателем; отметка появится здесь после выставления.</p>
+</section>
+{% endif %}
+
+{% for row in rows %}
+<section class="panel">
+  <header class="panel__head">
+    <div class="panel__title">
+      <span class="panel__num mono">{{ forloop.counter|stringformat:"02d" }}</span>
+      <h2>{{ row.course.title }}</h2>
+    </div>
+    <span class="mono dim">{{ row.course.group.code }} · {{ row.course.teacher|fio }}</span>
+  </header>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Вид контроля</th><th>Дата</th><th>Преподаватель</th><th class="ta-r">Оценка</th></tr></thead>
+      <tbody>
+        {% for grade in row.grades %}
+        <tr>
+          <td>{{ grade.get_kind_display }}{% if grade.comment %}<small class="cell-sub">{{ grade.comment }}</small>{% endif %}</td>
+          <td>{{ grade.date|date:"d.m.Y" }}</td>
+          <td>{{ grade.created_by|fio }}</td>
+          <td class="ta-r"><span class="grade {% if grade.value == '5' %}grade--5{% elif grade.value == '4' %}grade--4{% elif grade.value == 'зачтено' %}grade--pass{% elif grade.is_fail %}grade--fail{% endif %}">{{ grade.value }}</span></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="panel-foot">
+    <span>{{ row.grades|length }} записей</span>
+    <span>средний по дисциплине <b>{{ row.average|ru_num }}</b></span>
+  </div>
+</section>
+{% empty %}
+<section class="panel">
+  <div class="empty"><b>Оценок пока нет</b><p>Когда преподаватель выставит оценку в журнале, она появится здесь. Студенту оценки ставит только преподаватель курса.</p></div>
+</section>
+{% endfor %}
+{% endblock %}

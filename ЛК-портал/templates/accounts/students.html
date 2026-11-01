@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load bgitu %}
+{% block title %}Студенты{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="mono dim">управление</p>
+  <h1>Пользователи и группы</h1>
+  <p class="muted">Назначение группы определяет расписание и курсы студента. Роль задаёт права в кабинете.</p>
+</div>
+
+<section class="panel">
+  <header class="panel__head">
+    <div class="panel__title"><span class="panel__num mono">01</span><h2>Профили</h2></div>
+    <form method="get" class="inline-form">
+      <input class="input input--sm" type="search" name="q" value="{{ query }}" placeholder="ФИО или логин" aria-label="Поиск">
+      <button class="btn btn--ghost btn--sm" type="submit">Найти</button>
+    </form>
+  </header>
+
+  <div class="table-wrap">
+    <table class="data-table students-table">
+      <thead><tr><th>Пользователь</th><th>Роль</th><th>Группа</th><th>Зачётка</th><th></th></tr></thead>
+      <tbody>
+        {% for profile in profiles %}
+          <tr>
+            <td>
+              {{ profile.user|fio }}
+              <small class="cell-sub">{{ profile.user.username }}{% if profile.user.email %} · {{ profile.user.email }}{% endif %}</small>
+            </td>
+            <td colspan="3">
+              <form method="post" action="{% url 'accounts:student_update' profile.user_id %}" class="inline-form inline-form--wide">
+                {% csrf_token %}
+                <select class="select select--sm" name="role" aria-label="Роль">
+                  {% for role in roles %}
+                    {% if is_developer or not role.is_developer %}
+                      <option value="{{ role.id }}" {% if profile.role_id == role.id %}selected{% endif %}>{{ role.name }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+                <select class="select select--sm" name="group" aria-label="Группа">
+                  <option value="">— без группы —</option>
+                  {% for group in groups %}
+                    <option value="{{ group.id }}" {% if profile.group_id == group.id %}selected{% endif %}>{{ group.code }}</option>
+                  {% endfor %}
+                </select>
+                <input class="input input--sm" name="record_book" value="{{ profile.record_book }}" placeholder="ИСТ-201/24" aria-label="Зачётная книжка">
+                <button class="btn btn--ghost btn--sm" type="submit">Сохранить</button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="5" class="muted">Пользователи не найдены.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

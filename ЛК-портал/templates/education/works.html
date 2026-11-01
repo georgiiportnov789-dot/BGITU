@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}Мои работы{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="mono dim">портфолио работ</p>
+  <h1>Мои работы</h1>
+  <p class="muted">Файлы, загруженные на курсах: статус проверки, оценка и комментарий преподавателя.</p>
+</div>
+
+<section class="panel">
+  <header class="panel__head">
+    <div class="panel__title"><span class="panel__num mono">01</span><h2>Загрузки</h2></div>
+    <span class="mono dim">{{ submissions|length }}</span>
+  </header>
+  {% if submissions %}
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Работа</th><th>Курс</th><th>Загружена</th><th>Статус</th><th class="ta-r">Оценка</th><th></th></tr></thead>
+        <tbody>
+          {% for submission in submissions %}
+            <tr>
+              <td>{{ submission.assignment.title }}{% if submission.teacher_comment %}<small class="cell-sub">{{ submission.teacher_comment }}</small>{% endif %}</td>
+              <td>{{ submission.assignment.course.title }}</td>
+              <td>{{ submission.submitted_at|date:"d.m.Y H:i" }}</td>
+              <td><span class="req-status req-status--{% if submission.status == 'reviewed' %}ready{% else %}work{% endif %}">{{ submission.get_status_display }}</span></td>
+              <td class="ta-r">{% if submission.grade %}<span class="grade">{{ submission.grade }}</span>{% else %}—{% endif %}</td>
+              <td class="ta-r">{% if submission.file %}<a class="mono dim" href="{{ submission.file.url }}" target="_blank" rel="noopener">файл ↗</a>{% else %}—{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty"><b>Работ пока нет</b><p>Откройте курс и загрузите файл в задании — работа появится здесь.</p></div>
+  {% endif %}
+</section>
+{% endblock %}

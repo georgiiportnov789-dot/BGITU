@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Импорт расписания{% endblock %}
+{% block content %}
+<div class="page-head">
+  <p class="mono dim">расписание · управление</p>
+  <h1>Импорт файла БГИТУ</h1>
+  <p class="muted">Загрузите .xls или .xlsx с сайта bgitu.ru. Парсер заменит занятия в базе: группы, дни, пары, аудитории, преподаватели.</p>
+</div>
+
+<div class="grid-2">
+  <section class="panel">
+    <header class="panel__head">
+      <div class="panel__title"><span class="panel__num mono">01</span><h2>Загрузить файл</h2></div>
+      <span class="mono dim">.xls / .xlsx</span>
+    </header>
+    <form method="post" enctype="multipart/form-data" class="form-stack">
+      {% csrf_token %}
+      <div class="field"><label for="schedFile">Файл расписания *</label><input class="file-input" id="schedFile" name="file" type="file" accept=".xls,.xlsx" required></div>
+      <div class="field"><label for="schedUrl">Источник</label><input class="input" id="schedUrl" name="source_url" value="{{ source_url }}"></div>
+      <button class="btn btn--accent" type="submit">Импортировать</button>
+    </form>
+    <p class="panel-note">Текущий файл проекта: <code>fixtures/schedule/bgitu-2026-27-1semestr-IVT-IST-PI-PRI.xls</code> — скачан с bgitu.ru 25.10.2026.</p>
+    <form method="post" action="{% url 'schedule:import_server' %}">
+      {% csrf_token %}
+      <input type="hidden" name="path" value="fixtures/schedule/bgitu-2026-27-1semestr-IVT-IST-PI-PRI.xls">
+      <button class="btn btn--ghost btn--sm" type="submit">Импортировать файл из проекта</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <header class="panel__head">
+      <div class="panel__title"><span class="panel__num mono">02</span><h2>Как это работает</h2></div>
+    </header>
+    <div class="pf-rules">
+      <p><b>Источник.</b> Страница «Расписание → Очное обучение» на bgitu.ru: файл по группам ИВТ / ИСТ / ПИ / ПрИ, 1 семестр 2026/27.</p>
+      <p><b>Разбор.</b> Берётся шапка с кодами групп, дни недели и пары; из ячейки выделяются дисциплина, аудитория и преподаватель.</p>
+      <p><b>Замена.</b> Каждый импорт заменяет все занятия в базе — расписание всегда соответствует последнему файлу.</p>
+    </div>
+  </section>
+</div>
+
+<section class="panel">
+  <header class="panel__head">
+    <div class="panel__title"><span class="panel__num mono">03</span><h2>История импортов</h2></div>
+    <span class="mono dim">{{ imports|length }}</span>
+  </header>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Файл</th><th>Когда</th><th>Занятий</th><th>Групп</th><th>Кто</th><th></th></tr></thead>
+      <tbody>
+        {% for item in imports %}
+          <tr>
+            <td>{{ item.original_name }}{% if item.note %}<small class="cell-sub">{{ item.note }}</small>{% endif %}</td>
+            <td>{{ item.imported_at|date:"d.m.Y H:i" }}</td>
+            <td>{{ item.lessons_count }}</td>
+            <td>{{ item.groups_count }}</td>
+            <td>{{ item.imported_by|default:"—" }}</td>
+            <td class="ta-r"><a class="mono dim" href="{{ item.file.url }}" target="_blank" rel="noopener">файл ↗</a></td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="6" class="muted">Импортов ещё не было.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

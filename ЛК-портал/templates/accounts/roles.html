@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block title %}Роли{% endblock %}
+{% block content %}
+<div class="page-head page-head--row">
+  <div>
+    <p class="mono dim">доступ и права</p>
+    <h1>Роли</h1>
+    <p class="muted">Роль задаёт набор прав. Любой пользователь может запросить роль — её выдаёт сотрудник с правом управления ролями. Разработчик имеет полный доступ.</p>
+  </div>
+  {% if can_manage_roles or can_approve_roles %}
+    <div class="action-row">
+      {% if can_approve_roles %}<a class="btn btn--ghost" href="{% url 'accounts:role_requests' %}">Заявки{% if pending_count %} · {{ pending_count }}{% endif %}</a>{% endif %}
+      {% if can_manage_roles %}<a class="btn btn--accent" href="{% url 'accounts:role_create' %}">Создать роль</a>{% endif %}
+    </div>
+  {% endif %}
+</div>
+
+{% if profile and profile.role %}
+  <div class="flash flash--info">Ваша роль: <b>{{ profile.role.name }}</b> · права: {{ profile.role.permission_list|join:", "|default:"базовый доступ" }}. Заявка рассматривается сотрудником с правом управления ролями.</div>
+{% endif %}
+
+<div class="role-grid">
+  {% for role in roles %}
+    <article class="role-card {% if profile.role_id == role.id %}role-card--current{% endif %}">
+      <div class="role-card__top">
+        <span class="mono dim">{{ role.code }}</span>
+        {% if profile.role_id == role.id %}<span class="badge badge--accent">текущая</span>{% else %}<span class="badge">{{ role.users_count }} чел.</span>{% endif %}
+      </div>
+      <h2>{{ role.name }}</h2>
+      <p class="muted">{{ role.description|default:"Описание не заполнено." }}</p>
+      <div class="role-card__perms">
+        {% for permission in role.permission_list %}<span class="tag">{{ permission }}</span>{% empty %}<span class="tag">базовый доступ</span>{% endfor %}
+      </div>
+      {% if profile.role_id != role.id %}
+        <form method="post" action="{% url 'accounts:role_request_create' role.id %}" class="role-card__action">
+          {% csrf_token %}
+          <input class="input input--sm" name="comment" placeholder="Зачем нужна роль">
+          <button class="btn btn--ghost btn--sm" type="submit" {% if not user.is_authenticated %}disabled{% endif %}>Запросить</button>
+        </form>
+      {% else %}
+        <p class="mono dim role-card__current">роль назначена</p>
+      {% endif %}
+    </article>
+  {% endfor %}
+</div>
+
+<section class="panel">
+  <header class="panel__head">
+    <div class="panel__title"><span class="panel__num mono">01</span><h2>Мои заявки</h2></div>
+    <span class="mono dim">{{ my_requests|length }}</span>
+  </header>
+  {% if my_requests %}
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Роль</th><th>Создана</th><th>Статус</th><th>Комментарий проверяющего</th></tr></thead>
+        <tbody>
+          {% for request in my_requests %}
+            <tr>
+              <td>{{ request.role.name }}</td>
+              <td>{{ request.created_at|date:"d.m.Y H:i" }}</td>
+              <td><span class="req-status req-status--{% if request.status == 'approved' %}ready{% elif request.status == 'rejected' %}done{% else %}work{% endif %}">{{ request.get_status_display }}</span></td>
+              <td>{{ request.review_comment|default:"—" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty"><b>Заявок нет</b><p>Выберите роль выше и отправьте заявку с обоснованием.</p></div>
+  {% endif %}
+</section>
+{% endblock %}
