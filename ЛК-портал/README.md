@@ -9,7 +9,7 @@
 ## Запуск
 
 ```bash
-cd "$HOME/Documents/БГИТУ/ЛК-портал"
+cd "$HOME/Documents/BGITU/ЛК-портал"
 uv venv --python 3.11 .venv && . .venv/bin/activate
 uv pip install -r requirements.txt
 python manage.py migrate

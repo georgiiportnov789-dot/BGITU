@@ -12,7 +12,7 @@
 Запуск без Django:
 
 ```bash
-cd "$HOME/Documents/БГИТУ/Макет-ЛК"
+cd "$HOME/Documents/BGITU/Макет-ЛК"
 python3 scripts/serve.py
 # открыть http://127.0.0.1:8787/cabinet.html
 ```
