@@ -1083,7 +1083,7 @@ body.is-subview .cab-hero__meta { margin-top: 14px; }
 
 .sub-line__hint { font-size: 0.625rem; letter-spacing: 0.04em; }
 
-.group-switch .input { min-width: 140px; }
+.group-switch .input:not(.sel__native) { min-width: 140px; }
 
 /* ---------- Таблица ---------- */
 .sched-panel { padding: 10px; }
