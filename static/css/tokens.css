@@ -109,6 +109,19 @@
   color-scheme: dark;
 }
 
+/* «Бронза» — светлая как «Бумага», но акцент латунный.
+   Контраст #856632 к #f2eee6 = 4.60:1 (≥ 4.5:1 для текста). */
+[data-theme="brass"] {
+  --trail-op:        0.38;
+  --brand-base:      #f2eee6;
+  --brand-ink:       #171614;
+  --brand-accent:    #856632;
+  --brand-on-accent: #ffffff;
+  --brand-aux:       #6b5a3c;
+  --aurora-blend:    multiply;
+  color-scheme: light;
+}
+
 /* Плавная смена палитры при переключении темы. */
 .theme-anim,
 .theme-anim * {

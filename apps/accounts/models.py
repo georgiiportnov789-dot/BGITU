@@ -56,7 +56,7 @@ class Profile(models.Model):
     )
     theme = models.CharField(
         'тема оформления', max_length=10, blank=True,
-        choices=[('paper', 'Бумага'), ('surik', 'Сурик'), ('latun', 'Латунь')],
+        choices=[('paper', 'Бумага'), ('surik', 'Сурик'), ('latun', 'Латунь'), ('brass', 'Бронза')],
         help_text='Выбор пользователя переносится между устройствами',
     )
     record_book = models.CharField('зачётная книжка', max_length=32, blank=True)

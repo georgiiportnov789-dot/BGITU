@@ -298,7 +298,7 @@ def manage_student_update(request, user_id):
 
 
 # Допустимые темы оформления сайта.
-THEMES = ('paper', 'surik', 'latun')
+THEMES = ('paper', 'surik', 'latun', 'brass')
 
 
 @login_required

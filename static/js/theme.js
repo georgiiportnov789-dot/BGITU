@@ -1,11 +1,11 @@
-/* БГИТУ — темы оформления (paper/surik/latun).
+/* БГИТУ — темы оформления (paper/surik/latun/brass).
    Порядок: ?theme= в адресе → сохранённый выбор → «Бумага» (data-theme на <html>). */
 (function () {
   'use strict';
 
-  var THEMES = ['paper', 'surik', 'latun'];
+  var THEMES = ['paper', 'surik', 'latun', 'brass'];
   var COOKIE = 'bgitu-theme';
-  var META_COLORS = { paper: '#f2eee6', surik: '#0d0d0d', latun: '#0d0d0d' };
+  var META_COLORS = { paper: '#f2eee6', surik: '#0d0d0d', latun: '#0d0d0d', brass: '#f2eee6' };
   var root = document.documentElement;
 
   /* Тему задаёт сервер (профиль пользователя или cookie) — до отрисовки.

@@ -216,12 +216,31 @@ class ThemePreferenceTests(TestCase):
         self.assertEqual(self.user.profile.theme, 'latun')
         self.assertEqual(response.cookies['bgitu-theme'].value, 'latun')
 
+    def test_theme_settings_accepts_brass(self):
+        """Новая светлая тема «Бронза» сохраняется в профиле и cookie."""
+        self.client.force_login(self.user)
+        response = self.client.post(reverse('accounts:theme_set'), {'theme': 'brass'})
+        self.assertEqual(response.status_code, 200)
+        self.assertJSONEqual(response.content, {'ok': True, 'theme': 'brass'})
+        self.user.profile.refresh_from_db()
+        self.assertEqual(self.user.profile.theme, 'brass')
+        self.assertEqual(response.cookies['bgitu-theme'].value, 'brass')
+
     def test_theme_rejects_unknown_value(self):
         self.client.force_login(self.user)
         response = self.client.post(reverse('accounts:theme_set'), {'theme': 'pink'})
         self.assertEqual(response.status_code, 400)
         self.user.profile.refresh_from_db()
         self.assertEqual(self.user.profile.theme, '')
+
+    def test_theme_brass_renders_on_login(self):
+        """Тема brass рендерится на <html> и есть в обеих панелях выбора."""
+        self.client.cookies['bgitu-theme'] = 'brass'
+        response = self.client.get(reverse('accounts:login'))
+        self.assertContains(response, 'data-theme="brass"')
+        content = response.content.decode()
+        # мобильное меню + попап «Тема» — кнопка должна быть в обоих блоках
+        self.assertEqual(content.count('data-theme-set="brass"'), 2)
 
     def test_theme_survives_new_session(self):
         """После выхода и нового входа страница рендерится с сохранённой темой."""

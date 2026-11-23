@@ -14,7 +14,7 @@ PERMISSIONS = {
 }
 
 
-THEMES = ('paper', 'surik', 'latun')
+THEMES = ('paper', 'surik', 'latun', 'brass')
 
 
 def ui_theme(cookie_value):
