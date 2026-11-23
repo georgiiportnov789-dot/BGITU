@@ -421,6 +421,10 @@ body.menu-open { overflow: hidden; }
   width: min(720px, calc(100% - 32px));
   max-height: calc(100vh - 48px);
   padding: 0;
+  /* колонка: шапка и подвал всегда видны, прокручивается только тело —
+     иначе при крупном шрифте кнопки уезжают за нижний край экрана */
+  display: flex;
+  flex-direction: column;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-m);
   background: var(--bg-raised);
@@ -435,6 +439,7 @@ body.menu-open { overflow: hidden; }
 }
 .dialog__head {
   display: flex;
+  flex: none;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
@@ -442,15 +447,20 @@ body.menu-open { overflow: hidden; }
   border-bottom: 1px solid var(--line);
 }
 .dialog__head h2 { font-size: 1.25rem; letter-spacing: -0.01em; }
-.dialog__body { padding: 24px; overflow: auto; max-height: calc(100vh - 220px); }
+.dialog__body { flex: 1 1 0%; min-height: 0; padding: 24px; overflow: auto; max-height: none; }
+/* форма-обёртка тоже колонка, иначе шапка/тело/подвал не участвуют во flex */
+.dialog > form { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
 .dialog__foot {
   display: flex;
+  flex: none;                    /* подвал не сжимается: кнопки всегда целиком */
+  flex-wrap: wrap;               /* крупный шрифт: кнопки переносятся, а не режутся */
   justify-content: flex-end;
   gap: 10px;
   padding: 16px 24px;
   border-top: 1px solid var(--line);
   background: color-mix(in oklab, var(--bg-raised), var(--bg) 40%);
 }
+.dialog__foot .btn { flex: 0 1 auto; min-width: 0; }
 .dialog__close {
   width: 44px; height: 44px;
   display: inline-grid;
