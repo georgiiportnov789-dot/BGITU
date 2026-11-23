@@ -288,18 +288,34 @@ class WeekParityTests(TestCase):
         self.assertContains(even, '<b>Философия</b>')
 
     def test_same_slot_odd_even_shows_two_halves(self):
-        """Один слот: верхняя половина — 1-я неделя, нижняя — 2-я."""
-        from .models import Lesson
+        """Один слот: верхняя половина — 1-я неделя, нижняя — 2-я, со своими деталями."""
+        from .models import Bell, Lesson
 
-        Lesson.objects.create(group=self.group, weekday=3, pair=6, week='odd', subject='Слот-нечёт')
-        Lesson.objects.create(group=self.group, weekday=3, pair=6, week='even', subject='Слот-чёт')
+        Bell.objects.create(building='1', pair=6, start='15:45', end='17:20')
+        Bell.objects.create(building='2', pair=6, start='16:15', end='17:50')
+        Lesson.objects.create(
+            group=self.group, weekday=3, pair=6, week='odd', subject='Слот-нечёт',
+            room='101', teacher_name='Петров П.П.', building='1',
+        )
+        Lesson.objects.create(
+            group=self.group, weekday=3, pair=6, week='even', subject='Слот-чёт',
+            room='202', teacher_name='Иванов И.И.', building='2',
+        )
         self.client.force_login(self.student)
         odd = self.client.get(reverse('schedule:schedule'), {'week': '13'})
+        html = odd.content.decode()
         self.assertContains(odd, 'sched-cell--weeks')
-        self.assertContains(odd, '<b>Слот-нечёт</b>')
-        self.assertContains(odd, '<b>Слот-чёт</b>')
-        self.assertContains(odd, '1-я неделя')
-        self.assertContains(odd, '2-я неделя')
+        self.assertGreater(html.index('Слот-нечёт'), 0)
+        self.assertLess(html.index('Слот-нечёт'), html.index('Слот-чёт'))
+        self.assertIn('<span class="sched-half__label mono">1-я неделя</span>', html)
+        self.assertIn('<span class="sched-half__label mono">2-я неделя</span>', html)
+        # У каждой половины — своя аудитория, преподаватель и время по корпусу.
+        self.assertIn('ауд. 101', html)
+        self.assertIn('Петров П.П.', html)
+        self.assertIn('15:45–17:20', html)
+        self.assertIn('ауд. 202', html)
+        self.assertIn('Иванов И.И.', html)
+        self.assertIn('16:15–17:50', html)
         even = self.client.get(reverse('schedule:schedule'), {'week': '12'})
         self.assertContains(even, '<b>Слот-чёт</b>')
         self.assertContains(even, '<b>Слот-нечёт</b>')

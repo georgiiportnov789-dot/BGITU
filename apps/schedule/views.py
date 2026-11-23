@@ -195,13 +195,14 @@ def schedule_view(request):
         }
 
     # Число строк таблицы — из данных: последняя пара, на которой есть занятие
-    # хотя бы у одной группы текущего семестра/недели (не только у выбранной).
-    # Приоритет источников тот же, что в показе: перекрытые старые файлы строк
-    # не добавляют. Пустые пары (например 6-я) в таблицу не попадают вовсе.
+    # у любой группы в выбранную неделю, плюс пары выбранной группы из второй
+    # недели (её ячейки показывают оба варианта). Приоритет источников тот же.
     week_pool = resolve_lessons(
         Lesson.objects.select_related('source').filter(week__in=[Lesson.WEEK_ALL, parity])
     )
-    max_pair = max((item.pair for item in week_pool), default=0)
+    week_max = max((item.pair for item in week_pool), default=0)
+    group_max = max((item.pair for item in lessons), default=0)
+    max_pair = max(week_max, group_max)
     pairs = range(1, max_pair + 1) if max_pair else range(0)
 
     grid = []

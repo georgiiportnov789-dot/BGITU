@@ -6,7 +6,7 @@ from apps.accounts.models import Role
 
 
 class ThemeUITests(TestCase):
-    """Переключатель тем (paper/surik/latun) — как на основном сайте bgitu."""
+    """Переключатель тем (paper/surik/latun/brass) — как на основном сайте bgitu."""
 
     @classmethod
     def setUpTestData(cls):
@@ -20,7 +20,7 @@ class ThemeUITests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'data-theme="paper"')
         self.assertContains(response, 'id="theme-pop"')
-        for name in ('paper', 'surik', 'latun'):
+        for name in ('paper', 'surik', 'latun', 'brass'):
             self.assertContains(response, f'data-theme-set="{name}"')
         self.assertContains(response, 'js/theme.js')
 

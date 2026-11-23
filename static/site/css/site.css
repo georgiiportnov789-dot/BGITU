@@ -446,14 +446,16 @@ svg, canvas { display: block; max-width: 100%; }
 html[data-theme="paper"] { --brand-base: #f2eee6; --brand-ink: #171614; --brand-accent: #b8322a; --brand-on-accent: #ffffff; --brand-aux: #8c6b3f; --aurora-blend: multiply; color-scheme: light; }
 html[data-theme="surik"] { --brand-base: #0d0d0d; --brand-ink: #f2f2f2; --brand-accent: #ff5a2e; --brand-on-accent: #0d0d0d; --brand-aux: #ff9a3c; color-scheme: dark; }
 html[data-theme="latun"] { --brand-base: #0d0d0d; --brand-ink: #f2f2f2; --brand-accent: #d6b072; --brand-on-accent: #0d0d0d; --brand-aux: #f0d49a; color-scheme: dark; }
-html[data-theme="paper"] .glass { box-shadow: 0 24px 60px rgb(0 0 0 / 0.08); }
-html[data-theme="paper"] .search { box-shadow: 0 30px 80px rgb(0 0 0 / 0.12), 0 0 0 6px var(--accent-soft); }
+html[data-theme="brass"] { --brand-base: #f2eee6; --brand-ink: #171614; --brand-accent: #856632; --brand-on-accent: #ffffff; --brand-aux: #6b5a3c; --aurora-blend: multiply; color-scheme: light; }
+html[data-theme="paper"] .glass, html[data-theme="brass"] .glass { box-shadow: 0 24px 60px rgb(0 0 0 / 0.08); }
+html[data-theme="paper"] .search, html[data-theme="brass"] .search { box-shadow: 0 30px 80px rgb(0 0 0 / 0.12), 0 0 0 6px var(--accent-soft); }
 html.theme-anim, html.theme-anim * { transition: background-color 0.45s, color 0.45s, border-color 0.45s, fill 0.45s !important; }
 
 /* ================= Фон «Тушь ×3»: единый, под контентом ================= */
 /* насколько заметны линии фона: 1 — как было, меньше — спокойнее */
 :root { --trail-op: 0.5; }
 html[data-theme="paper"] { --trail-op: 0.42; }
+html[data-theme="brass"] { --trail-op: 0.42; }
 .trail { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; max-width: none; pointer-events: none; opacity: var(--trail-op); }
 main, .footer { position: relative; z-index: 1; }
 .section--raised { background: transparent; border-block: 0; }
